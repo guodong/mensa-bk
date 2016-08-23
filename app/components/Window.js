@@ -51,7 +51,7 @@ export class Window extends Component {
     bare = false,
     position = 'absolute',
     background = '',
-    content = '',
+    content = [],
     draggable = true,
     resizeable = true,
     title = 'No title',
@@ -175,6 +175,11 @@ export class Window extends Component {
   }
   setBottom(val) {
     this.styles.bottom = val;
+    return this;
+  }
+
+  appendContent(child) {
+    this.content.push(child);
     return this;
   }
 
