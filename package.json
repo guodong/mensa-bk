@@ -1,0 +1,28 @@
+{
+  "name": "mensa",
+  "version": "1.0.0",
+  "description": "mensa",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack",
+    "dev": "webpack-dev-server --progress --colors --content-base build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "mensa"
+  ],
+  "author": "guodong",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-preset-es2015": "^6.13.2",
+    "css-loader": "^0.23.1",
+    "handlebars": "^4.0.5",
+    "jquery": "^3.1.0",
+    "less": "^2.7.1",
+    "less-loader": "^2.2.3",
+    "react": "^15.3.1",
+    "style-loader": "^0.13.1",
+    "webpack": "^1.13.2",
+    "webpack-dev-server": "^1.15.0"
+  }
+}
