@@ -3,6 +3,9 @@ import Handlebars from '../../node_modules/handlebars/dist/handlebars';
 import $ from '../../node_modules/jquery';
 
 Handlebars.registerHelper('size', function(size) {
+  if (size === 'auto') {
+    return 'auto';
+  }
   var val = size + '';
   if (-1 === val.indexOf('%')) {
     return val + 'px';
@@ -18,76 +21,11 @@ Handlebars.registerHelper('exists', function(variable, options) {
   }
 });
 
+
 export class Window extends Component {
-  constructor({
-    /**
-     * window width, px or %
-     */
-    width = 300,
-    
-    /**
-     * window height, px or %
-     */
-    height = 200,
+  constructor(props) {
+    super(props);
 
-    /**
-     * window x coordinate in px
-     */
-    x = 0,
-
-    /**
-     * window y coordinate in px
-     */
-    y = 0,
-
-    /**
-     * window z order
-     */
-    z = 0,
-
-    /**
-     * whether to show top and border, if bare then not show
-     */
-    bare = false,
-    position = 'absolute',
-    background = '',
-    content = [],
-    draggable = true,
-    resizeable = true,
-    title = 'No title',
-    className = '',
-    bottom = undefined
-  }) {
-    super();
-    this.styles = {
-      width: width,
-      height: height,
-      x: x,
-      y: y,
-      z: z,
-      bare: bare,
-      background: background,
-      bottom: bottom,
-      position: position
-    }
-    this.draggable = draggable;
-    this.resizeable = resizeable;
-    this.content = content;
-    this.title = title;
-    this.className = className;
-
-    this.isRendered = false;
-    /**
-     * template string
-     * @type {string}
-     */
-    this.template = '';
-
-    /**
-     * children windows
-     * @type {Array}
-     */
-    this.children = [];
 
     /**
      * parent window
@@ -96,7 +34,7 @@ export class Window extends Component {
     this.parent = null;
 
     this.template = `
-    <window id="{{id}}" class="{{className}} {{#unless styles.bare}}normal{{/unless}}" style="position: {{styles.position}};width: {{size styles.width}};height: {{size styles.height}};left: {{size styles.x}};{{#exists styles.bottom}}bottom: {{size styles.bottom}};{{else}}top: {{size styles.y}};{{/exists}}z-index: {{styles.z}}">
+    <window class="{{className}} {{#unless styles.bare}}normal{{/unless}}" style="display: {{#if visible}}block{{else}}none{{/if}};position: {{styles.position}};width: {{size styles.width}};height: {{size styles.height}};left: {{size styles.x}};{{#exists styles.bottom}}bottom: {{size styles.bottom}};{{else}}top: {{size styles.y}};{{/exists}}z-index: {{styles.z}}">
         {{#unless styles.bare}}<top>
         <buttons>
             <maximize></maximize>
@@ -110,49 +48,6 @@ export class Window extends Component {
     `;
   }
 
-  getDom() {
-    return $('#' + this.id);
-  }
-
-  setWidth(width) {
-    this.styles.width = width;
-    if (this.isRendered) {
-      this.getDom().css('width', width);
-    }
-    return this;
-  }
-
-  setHeight(height) {
-    this.styles.height = height;
-    if (this.isRendered) {
-      this.getDom().css('height', height);
-    }
-    return this;
-  }
-
-  setX(x) {
-    this.styles.x = x;
-    if (this.isRendered) {
-      this.getDom().css('left', x);
-    }
-    return this;
-  }
-
-  setY(y) {
-    this.styles.y = y;
-    if (this.isRendered) {
-      this.getDom().css('top', y);
-    }
-    return this;
-  }
-
-  setZ(z) {
-    this.styles.z = z;
-    if (this.isRendered) {
-      this.getDom().css('zIndex', z);
-    }
-    return this;
-  }
   
   setBackground(bg) {
     this.styles.background = bg;
@@ -168,11 +63,6 @@ export class Window extends Component {
     this.styles.bare = !!bare;
     return this;
   }
-
-  setParent(parent) {
-    this.parent = parent;
-    return this;
-  }
   setBottom(val) {
     this.styles.bottom = val;
     return this;
@@ -182,32 +72,38 @@ export class Window extends Component {
     this.content.push(child);
     return this;
   }
-
-  render(parentDom) {
-    this.isRendered = true;
-    var template = Handlebars.compile(this.template);
-    var html = template(this);
-
-    parentDom.append(html);
-    this.isRendered = true;
+  
+  setTemplate(tpl) {
+    this.template = tpl;
+    return this;
   }
 
-
-  show(parentDom) {
-    if (!parentDom) {
-      parentDom = $('body');
-    }
-    if (!this.isRendered) {
-      this.render(parentDom);
-    }
-    this.getDom().show();
+  setContent(content) {
+    this.content = content;
+    return this;
   }
 
-  hide() {
-    this.getDom().hide();
-  }
+  // /**
+  //  * render window to the dom tree, window visibility is determined by visible property
+  //  * @param parentDom
+  //  */
+  // render(parentDom) {
+  //   if (!parentDom) {
+  //     parentDom = $('body');
+  //   }
+  //   $(parentDom).append('<component id="'+this.id+'"></component>');
+  //   var template = Handlebars.compile(this.template);
+  //   var html = template(this);
+  //
+  //   for (var i in this.listeners) {
+  //     this.getDom().on(i, this.listeners[i]);
+  //   }
+  //
+  //   this.isRendered = true;
+  // }
 
   toString() {
+    this.render('comp')
     var template = Handlebars.compile(this.template);
     var html = template(this);
     return html;

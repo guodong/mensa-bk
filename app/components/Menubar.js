@@ -1,35 +1,53 @@
-import {Window} from './Window';
+import {Component} from './Component';
+import Registry from './Registry';
 
-export class Menubar extends Window {
-  constructor(props) {
-    var startMenu = new Window({
-      bare: true,
-      x: 10,
-      width: 40,
-      height: 40,
-      className: 'startMenu',
-      content:'<img src="assets/windows_7_orb_icon_by_skyangels.png">'
-    });
-    
-    var dateTime = new Window({
-      bare: true,
-      width: 70,
-      height: '100%',
-      className: 'dateTime',
-      content: `
-      <time>19:02</time>
-      <date>2016/6/29</date>
-      `,
-      position: 'relative'
-    });
+export class Menubar extends Component {
+  constructor() {
+
     super({
-      bare: true,
-      width: '100%',
-      height: 40,
-      x: 0,
-      bottom: 0,
-      className: 'menubar',
-      content: [startMenu, dateTime]
+      styles: {
+        width: '100%',
+        height: '40px',
+        x: 0,
+        bottom: 0,
+        display: 'block',
+        position: 'absolute',
+        backgroundColor: '#619bb9',
+        background: 'linear-gradient(65deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.9))',
+        borderTop: '1px solid rgba(0, 0, 0, 0.5)',
+        boxShadow: 'inset 0 1px 0px rgba(255, 255, 255, 0.4)'
+      },
+      template: `
+      <datetime style="display: block;float: right;"></datetime>
+      `
     });
+
+    var startBtn = new Component({
+      template: '<img src="assets/win7-start-btn.png" style="display: block;"/>',
+      styles: {
+        marginLeft: '5px',
+        display: 'block',
+        width: '40px'
+      },
+      listeners: {
+        click() {
+          Registry.findComponentByName('startmenu').toggle();
+        }
+      }
+    });
+    this.appendChild(startBtn);
+
+    var datetime = new Component({
+      styles: {
+        width: '70px',
+        display: 'block',
+        float: 'right',
+        color: 'white',
+        textAlign: 'center',
+        padding: '5px'
+      },
+      template: '<div>15:44</div><div>2016/8/28</div>'
+    });
+    this.appendChild(datetime, 'datetime');
   }
 }

@@ -1,17 +1,25 @@
+import {Component} from './Component';
 import {Window} from './Window';
 import {Menubar} from './Menubar';
+import {StartMenu} from './StartMenu';
 
-export class Desktop extends Window {
+export class Desktop extends Component {
   constructor(props) {
+    super({
+      tagName: 'desktop',
+      styles: {
+        width: '100%',
+        height: '100%',
+        background: 'url(assets/windows7-bg.jpg)',
+        backgroundSize: 'cover',
+        display: 'block'
+      }
+    });
     var menubar = new Menubar();
+    this.appendChild(menubar);
     
-    super(props);
-    this.setBare(true);
-    this.setX(0);
-    this.setY(0);
-    this.setWidth('100%');
-    this.setHeight('100%');
-    this.appendContent(menubar);
+    var startmenu = new StartMenu();
+    this.appendChild(startmenu);
   }
   
   
