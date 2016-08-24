@@ -49,7 +49,8 @@ export class Component {
     styles = {},
     parent = null,
     parentTag = '',
-    name = ''
+    name = '',
+    props = {}
   } = {}) {
     this.id = '__comp__' + Util.generateId();
     Registry.register(this);
@@ -69,6 +70,7 @@ export class Component {
     this.parent = parent;
     this.parentTag = parentTag;
     this.name = name;
+    this.props = props;
 
     this.isRendered = false;
 

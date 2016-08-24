@@ -6,6 +6,9 @@ export class StartMenu extends Component {
       name: 'startmenu',
       className: 'startmenu',
       visible: false,
+      props: {
+        searchval: 'search cloudware!'
+      },
       template: `
       <div class="startpopup">
     <div class="applications">
@@ -15,7 +18,7 @@ export class StartMenu extends Component {
         
         <div class="search">
             <form action="">
-            <input type="text" placeholder="Search programs and files">
+            <input type="text" value="{{props.searchval}}" placeholder="Search programs and files">
             </form>
         </div>
 	</div>
