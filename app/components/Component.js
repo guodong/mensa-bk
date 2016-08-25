@@ -5,34 +5,34 @@ import Registry from './Registry'
 
 export class Component {
   constructor({
-    /**
-     * window width, px or %
-     */
+  /**
+   * window width, px or %
+   */
     width = 'auto',
 
-    /**
-     * window height, px or %
-     */
+  /**
+   * window height, px or %
+   */
     height = 'auto',
 
-    /**
-     * window x coordinate in px
-     */
+  /**
+   * window x coordinate in px
+   */
     x = 0,
 
-    /**
-     * window y coordinate in px
-     */
+  /**
+   * window y coordinate in px
+   */
     y = 0,
 
-    /**
-     * window z order
-     */
+  /**
+   * window z order
+   */
     z = 0,
 
-    /**
-     * whether to show top and border, if bare then not show
-     */
+  /**
+   * whether to show top and border, if bare then not show
+   */
     position = 'absolute',
     background = '',
     content = [],
@@ -50,10 +50,10 @@ export class Component {
     parentTag = '',
     name = '',
     props = {},
-    afterRender = function() {
+    afterRender = function () {
 
     }
-  } = {}) {
+    } = {}) {
     this.id = '__comp__' + Util.generateId();
     Registry.register(this);
     this.width = width;
@@ -160,7 +160,7 @@ export class Component {
       $(parentDom).append(dom);
     }
     var self = this;
-    this.children.map(function(child) {
+    this.children.map(function (child) {
       child.render(self.getDom());
     });
     for (var i in this.listeners) {
@@ -188,6 +188,10 @@ export class Component {
 
   toggle() {
     this.visible ? this.hide() : this.show();
+  }
+
+  props(props) {
+    this.props = props;
   }
 
 }
