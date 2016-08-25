@@ -81,16 +81,19 @@ export class Window extends Component {
         <top-row>
           <top>
           <buttons>
-              <maximize></maximize>
-              <close></close>
+              <close>✖</close>
+              <maximize>□</maximize>
+              <minimize>-</minimize>
           </buttons>
           <title>{{title}}</title>
         </top>
         </top-row>
         {{/unless}}
+
         <content-row>
           <content>{{{content}}}</content>
         </content-row>
+
         </window-layout>
         
     `;
