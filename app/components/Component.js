@@ -190,8 +190,9 @@ export class Component {
     this.visible ? this.hide() : this.show();
   }
 
-  props(props) {
+  setProps(props) {
     this.props = props;
+    return this;
   }
 
 }
