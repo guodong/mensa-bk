@@ -7,7 +7,7 @@ export class Menubar extends Component {
     super({
       styles: {
         width: '100%',
-        height: '40px',
+        height: '41px',
         x: 0,
         bottom: 0,
         display: 'block',
@@ -23,6 +23,7 @@ export class Menubar extends Component {
     });
 
     var startBtn = new Component({
+      name: 'startbtn',
       template: '<img src="assets/win7-start-btn.png" style="display: block;"/>',
       styles: {
         marginLeft: '5px',

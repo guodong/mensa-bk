@@ -1,6 +1,7 @@
 import {Component} from './Component';
 import Handlebars from '../../node_modules/handlebars/dist/handlebars';
 import $ from '../../node_modules/jquery';
+import interact from '../../node_modules/interact.js/interact'
 
 Handlebars.registerHelper('size', function(size) {
   if (size === 'auto') {
@@ -23,32 +24,79 @@ Handlebars.registerHelper('exists', function(variable, options) {
 
 
 export class Window extends Component {
-  constructor(props) {
-    super(props);
+  constructor({
+    title = 'New Window',
+    bare = false,
+    styles = {},
+    content = ''
+  } = {}) {
+    super({
+      tagName: 'window',
+      styles: styles,
+      afterRender: function(comp) {
+        interact('#' + comp.id + ' top').draggable({
+          onmove: function(event) {
+            var target = event.target.parentNode.parentNode.parentNode, x = (parseFloat(target.style.left) || 0) + event.dx, y = (parseFloat(target.style.top) || 0) + event.dy;
+            target.style.left = x + 'px';
+            target.style.top = y + 'px';
 
+          },
+        });
+        interact('#' + comp.id).resizable({
+          edges: {
+            left: true,
+            right: true,
+            bottom: true,
+            top: false
+          }
+        }).on('resizemove', function(event) {
+          var target = event.target, x = (parseFloat(target.getAttribute('data-resize-x')) || 0), y = (parseFloat(target.getAttribute('data-resize-y')) || 0);
 
-    /**
-     * parent window
-     * @type {null}
-     */
-    this.parent = null;
+          // update the element's style
+          target.style.width = event.rect.width + 'px';
+          target.style.height = event.rect.height + 'px';
+
+          self.width = event.rect.width;
+          self.height = event.rect.height;
+
+          // translate when resizing from top or left edges
+          x += event.deltaRect.left;
+          y += event.deltaRect.top;
+
+          target.style.webkitTransform = target.style.transform = 'translate(' + x + 'px,' + y + 'px)';
+
+          target.setAttribute('data-resize-x', x);
+          target.setAttribute('data-resize-y', y);
+        });
+      }
+    });
+    this.title = title;
+    this.bare = bare;
+    this.content = content;
 
     this.template = `
-    <window class="{{className}} {{#unless styles.bare}}normal{{/unless}}" style="display: {{#if visible}}block{{else}}none{{/if}};position: {{styles.position}};width: {{size styles.width}};height: {{size styles.height}};left: {{size styles.x}};{{#exists styles.bottom}}bottom: {{size styles.bottom}};{{else}}top: {{size styles.y}};{{/exists}}z-index: {{styles.z}}">
-        {{#unless styles.bare}}<top>
-        <buttons>
-            <maximize></maximize>
-            <close></close>
-        </buttons>
-        <title>{{title}}</title>
+        {{#unless bare}}
+        <resize></resize>
+        <window-layout>
+        <top-row>
+          <top>
+          <buttons>
+              <maximize></maximize>
+              <close></close>
+          </buttons>
+          <title>{{title}}</title>
         </top>
+        </top-row>
         {{/unless}}
-        <content style="background: {{styles.background}};background-size: cover">{{{content}}}</content>
-    </window>
+        <content-row>
+          <content>{{{content}}}</content>
+        </content-row>
+        </window-layout>
+        
     `;
   }
 
-  
+
   setBackground(bg) {
     this.styles.background = bg;
     return this;
@@ -63,6 +111,7 @@ export class Window extends Component {
     this.styles.bare = !!bare;
     return this;
   }
+
   setBottom(val) {
     this.styles.bottom = val;
     return this;
@@ -72,7 +121,7 @@ export class Window extends Component {
     this.content.push(child);
     return this;
   }
-  
+
   setTemplate(tpl) {
     this.template = tpl;
     return this;
@@ -82,25 +131,6 @@ export class Window extends Component {
     this.content = content;
     return this;
   }
-
-  // /**
-  //  * render window to the dom tree, window visibility is determined by visible property
-  //  * @param parentDom
-  //  */
-  // render(parentDom) {
-  //   if (!parentDom) {
-  //     parentDom = $('body');
-  //   }
-  //   $(parentDom).append('<component id="'+this.id+'"></component>');
-  //   var template = Handlebars.compile(this.template);
-  //   var html = template(this);
-  //
-  //   for (var i in this.listeners) {
-  //     this.getDom().on(i, this.listeners[i]);
-  //   }
-  //
-  //   this.isRendered = true;
-  // }
 
   toString() {
     this.render('comp')

@@ -20,6 +20,17 @@ export class Desktop extends Component {
     
     var startmenu = new StartMenu();
     this.appendChild(startmenu);
+    
+    var window = new Window({
+      title: 'test',
+      styles: {
+        width: '300px',
+        height: '200px'
+      },
+      content: '123'
+    });
+    
+    this.appendChild(window);
   }
   
   

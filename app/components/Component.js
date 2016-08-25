@@ -33,7 +33,6 @@ export class Component {
     /**
      * whether to show top and border, if bare then not show
      */
-    bare = false,
     position = 'absolute',
     background = '',
     content = [],
@@ -50,7 +49,10 @@ export class Component {
     parent = null,
     parentTag = '',
     name = '',
-    props = {}
+    props = {},
+    afterRender = function() {
+
+    }
   } = {}) {
     this.id = '__comp__' + Util.generateId();
     Registry.register(this);
@@ -71,6 +73,7 @@ export class Component {
     this.parentTag = parentTag;
     this.name = name;
     this.props = props;
+    this.afterRender = afterRender;
 
     this.isRendered = false;
 
@@ -144,7 +147,9 @@ export class Component {
     var dom = document.createElement(this.tagName);
     dom.setAttribute('id', this.id);
     dom.setAttribute('class', this.className);
-    this.styles.display = this.visible ? 'block' : 'none';
+    if (!this.visible) {
+      this.styles.display = 'none';
+    }
     Object.assign(dom.style, this.styles);
     var template = Handlebars.compile(this.template);
     var html = template(this);
@@ -162,6 +167,7 @@ export class Component {
       this.getDom().on(i, this.listeners[i]);
     }
     this.isRendered = true;
+    this.afterRender(this);
   }
 
   show(parentDom) {

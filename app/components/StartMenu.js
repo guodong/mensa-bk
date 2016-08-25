@@ -1,4 +1,6 @@
 import {Component} from './Component';
+import Registry from './Registry';
+import $ from '../../node_modules/jquery';
 
 export class StartMenu extends Component {
   constructor() {
@@ -8,6 +10,11 @@ export class StartMenu extends Component {
       visible: false,
       props: {
         searchval: 'search cloudware!'
+      },
+      listeners: {
+        click: function(e) {
+          // e.stopPropagation();
+        }
       },
       template: `
       <div class="startpopup">
@@ -38,5 +45,11 @@ export class StartMenu extends Component {
     </div>
       `
     });
+    var self = this;
+    $(document).on('click', function(e) {
+      if (!self.getDom().has(e.target).length && !Registry.findComponentByName('startbtn').getDom().has(e.target).length) {
+        self.hide();
+      }
+    })
   }
 }
