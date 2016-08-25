@@ -133,6 +133,14 @@ export class Component {
     parent.children.push(this);
     return this;
   }
+  
+  setStyles(styles) {
+    this.styles = styles;
+  }
+
+  addStyles(styles) {
+    Object.assign(this.styles, styles);
+  }
 
   appendChild(child, parentTag) {
     this.children.push(child);
@@ -189,6 +197,22 @@ export class Component {
   hide() {
     this.getDom().hide();
     this.visible = false;
+  }
+  
+  removeChild(comp) {
+    for (var i in this.children) {
+      if (comp === this.children[i]) {
+        this.children.splice(i, 1);
+        return;
+      }
+    }
+  }
+  
+  destroy() {
+    this.getDom().remove();
+    if (this.parent)
+      this.parent.removeChild(this);
+    delete this;
   }
 
   toggle() {

@@ -135,6 +135,14 @@ export class Window extends Component {
     return this;
   }
 
+  render(parentDom) {
+    super.render(parentDom);
+    var self = this;
+    this.getDom().find('close').on('click', function() {
+      self.destroy();
+    })
+  }
+
   toString() {
     this.render('comp')
     var template = Handlebars.compile(this.template);

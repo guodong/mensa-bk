@@ -20,10 +20,10 @@ export class Desktop extends Component {
     });
     var menubar = new Menubar();
     this.appendChild(menubar);
-
+    
     var startmenu = new StartMenu();
     this.appendChild(startmenu);
-  
+
     var iconlist = new IconList();
     this.appendChild(iconlist);
   }
