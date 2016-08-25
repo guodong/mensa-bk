@@ -1,5 +1,5 @@
 import {Component} from './Component';
-import Registry from './Registry';
+import {Registry} from './Registry';
 
 export class Menubar extends Component {
   constructor() {

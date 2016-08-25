@@ -7,6 +7,7 @@ import {IconList} from './IconList';
 export class Desktop extends Component {
   constructor(props) {
     super({
+      name: 'desktop',
       tagName: 'desktop',
       styles: {
         width: '100%',
@@ -22,15 +23,7 @@ export class Desktop extends Component {
 
     var startmenu = new StartMenu();
     this.appendChild(startmenu);
-    var window = new Window({
-      title: 'test',
-      styles: {
-        //width: '300px',
-        //height: '200px'
-      },
-      content: '123'
-    });
-    this.appendChild(window);
+  
     var iconlist = new IconList();
     this.appendChild(iconlist);
   }

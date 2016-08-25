@@ -1,5 +1,5 @@
 import {Component} from './Component';
-import Registry from './Registry';
+import {Registry} from './Registry';
 import $ from '../../node_modules/jquery';
 
 export class StartMenu extends Component {

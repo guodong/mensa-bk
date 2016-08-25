@@ -1,7 +1,7 @@
 import Util from './Util';
 import $ from '../../node_modules/jquery';
 import Handlebars from '../../node_modules/handlebars/dist/handlebars';
-import Registry from './Registry'
+import {Registry} from './Registry'
 
 export class Component {
   constructor({
@@ -138,6 +138,11 @@ export class Component {
     this.children.push(child);
     child.parent = this;
     child.parentTag = parentTag;
+
+    /* if parent is already rendered, render this comp */
+    if (this.isRendered) {
+      child.render(this.getDom());
+    }
   }
 
   render(parentDom) {

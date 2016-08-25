@@ -2,7 +2,7 @@ let instance = null;
 
 var components = [];
 
-export default class Registry {
+export class Registry {
   constructor() {
     this.components = [];
   }
