@@ -15,9 +15,7 @@ export class Desktop extends Component {
         backgroundSize: 'cover',
         display: 'block'
       },
-      template: `
-  <span></span>
-  `
+      template: ``
     });
     var menubar = new Menubar();
     this.appendChild(menubar);
@@ -33,8 +31,8 @@ export class Desktop extends Component {
       content: '123'
     });
     this.appendChild(window);
-    var iconlist= new IconList();
-    this.appendChild(iconlist, 'span');
+    var iconlist = new IconList();
+    this.appendChild(iconlist);
   }
 
 

@@ -8,8 +8,9 @@ export class Menubar extends Component {
       styles: {
         width: '100%',
         height: '41px',
-        x: 0,
+        left: 0,
         bottom: 0,
+        zIndex: 999,
         display: 'block',
         position: 'absolute',
         backgroundColor: '#619bb9',
