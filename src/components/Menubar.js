@@ -1,6 +1,6 @@
 import {Component} from './Component';
 import {Registry} from './Registry';
-
+import {MenuList} from './MenuList';
 export class Menubar extends Component {
   constructor() {
 
@@ -29,7 +29,8 @@ export class Menubar extends Component {
       styles: {
         marginLeft: '5px',
         display: 'block',
-        width: '40px'
+        width: '40px',
+        float:'left'
       },
       listeners: {
         click() {
@@ -38,6 +39,9 @@ export class Menubar extends Component {
       }
     });
     this.appendChild(startBtn);
+
+    var menuList=new MenuList();
+    this.appendChild(menuList);
 
     var datetime = new Component({
       styles: {
