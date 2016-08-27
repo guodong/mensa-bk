@@ -43,6 +43,9 @@ export class Menubar extends Component {
     var menuList=new MenuList();
     this.appendChild(menuList);
 
+
+
+
     var datetime = new Component({
       styles: {
         width: '70px',
@@ -52,8 +55,22 @@ export class Menubar extends Component {
         textAlign: 'center',
         padding: '5px'
       },
-      template: '<div>15:44</div><div>2016/8/28</div>'
+      template: '<div class="time">{{props.time}}</div><div class="date">{{props.date}}</div>'
+
     });
+
+
+    function startTime(){
+      var m = new Date();
+      var dateString = m.getFullYear() + "/" + ("0" + (m.getMonth() + 1)).slice(-2) + "/" + ("0" + m.getDate()).slice(-2);
+      var timeString = ("0" + m.getHours()).slice(-2) + ":" + ("0" + m.getMinutes()).slice(-2) + ":" + ("0" + m.getSeconds()).slice(-2);
+      datetime.getDom().find('.time').html(timeString);
+      datetime.getDom().find('.date').html(dateString);
+    }
+    startTime();
+    var t = setInterval(startTime, 1000);
+
+
     this.appendChild(datetime, 'datetime');
   }
 }
