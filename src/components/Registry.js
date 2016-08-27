@@ -1,11 +1,10 @@
 let instance = null;
 
 var components = [];
+var data = {};
+var apps = [];
 
 export class Registry {
-  constructor() {
-    this.components = [];
-  }
 
   /**
    * register a component to store
@@ -36,5 +35,17 @@ export class Registry {
       }
     }
     return null;
+  }
+  
+  static get(key) {
+    return data[key];
+  }
+  
+  static set(key, val) {
+    data[key] = val;
+  }
+  
+  static getApps() {
+    return apps;
   }
 }

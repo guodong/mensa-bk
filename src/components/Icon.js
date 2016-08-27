@@ -20,7 +20,10 @@ export class Icon extends Component {
             <img src={{props.iconSrc}} style="height: 48px;" ><br />{{props.iconName}}
         </a>
         `
-
     });
+    
+  }
+  setHandle(handle) {
+    this.addListener('dblclick', handle);
   }
 }

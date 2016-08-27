@@ -1,9 +1,11 @@
 import {Desktop} from './components/Desktop';
-import {ProcessManager} from './components/ProcessManager';
+import {AppManager} from './components/AppManager';
+import {Cloudware} from './components/Cloudware';
 import './styles/main.less';
 
 
 var desktop = new Desktop({});
 desktop.show();
 
-ProcessManager.run('http://localhost:8080/apps/monitor');
+// ProcessManager.run('http://localhost:8080/apps/monitor');
+AppManager.install('http://localhost:8082/About');

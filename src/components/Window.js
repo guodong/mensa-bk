@@ -24,15 +24,18 @@ Handlebars.registerHelper('exists', function(variable, options) {
 
 
 export class Window extends Component {
+
   constructor({
     title = 'New Window',
     bare = false,
     styles = {},
-    content = ''
+    content = '',
+    process = null
   } = {}) {
     super({
       tagName: 'window',
       styles: styles,
+      visible: false,
       afterRender: function(comp) {
         interact('#' + comp.id + ' top').draggable({
           onmove: function(event) {
@@ -41,7 +44,7 @@ export class Window extends Component {
             target.style.top = y + 'px';
 
           },
-        });
+        }).styleCursor(false);
         interact('#' + comp.id).resizable({
           edges: {
             left: true,
@@ -73,6 +76,11 @@ export class Window extends Component {
     this.title = title;
     this.bare = bare;
     this.content = content;
+    this.process = process;
+
+
+    this.isMaximized = false;
+    this.isMinimized = false;
 
     this.template = `
         {{#unless bare}}
@@ -97,6 +105,12 @@ export class Window extends Component {
         </window-layout>
         
     `;
+    var self = this;
+    this.listeners = {
+      afterDestroy() {
+        self.process.worker.postMessage({msg: 'destroy', payload: self.id});
+      }
+    }
   }
 
 
@@ -135,12 +149,55 @@ export class Window extends Component {
     return this;
   }
 
+  maximize() {
+    this.oldGeo = {
+      x: this.getDom().css('left'),
+      y: this.getDom().css('top'),
+      width: this.getDom().css('width'),
+      height: this.getDom().css('height')
+    };
+    this.getDom().css('left', 0).css('top', 0).width($(document).width()).height($(document).height() - 41).css('transform', '');
+
+    this.isMaximized = true;
+  }
+
+  unMaximize() {
+    this.getDom().css('left', this.oldGeo.x).css('top', this.oldGeo.y).width(this.oldGeo.width).height(this.oldGeo.height).css('transform', '');
+    this.isMaximized = false;
+  }
+
+  minimize() {
+    this.isMinimized = true;
+    this.hide();
+  }
+
+  unMinimize() {
+    if (this.isMinimized) {
+      this.isMinimized = false;
+      this.show();
+    }
+  }
+
+  toggleMaximize() {
+    if (this.isMaximized) {
+      this.unMaximize();
+    } else {
+      this.maximize();
+    }
+  }
+
   render(parentDom) {
     super.render(parentDom);
     var self = this;
     this.getDom().find('close').on('click', function() {
       self.destroy();
-    })
+    });
+    this.getDom().find('maximize').on('click', function() {
+      self.toggleMaximize();
+    });
+    this.getDom().find('minimize').on('click', function() {
+      self.minimize();
+    });
   }
 
   toString() {

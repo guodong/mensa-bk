@@ -5,37 +5,7 @@ import {Registry} from './Registry'
 
 export class Component {
   constructor({
-  /**
-   * window width, px or %
-   */
-    width = 'auto',
 
-  /**
-   * window height, px or %
-   */
-    height = 'auto',
-
-  /**
-   * window x coordinate in px
-   */
-    x = 0,
-
-  /**
-   * window y coordinate in px
-   */
-    y = 0,
-
-  /**
-   * window z order
-   */
-    z = 0,
-
-  /**
-   * whether to show top and border, if bare then not show
-   */
-    position = 'absolute',
-    background = '',
-    content = [],
     draggable = true,
     resizeable = true,
     title = 'No title',
@@ -56,14 +26,11 @@ export class Component {
     } = {}) {
     this.id = '__comp__' + Util.generateId();
     Registry.register(this);
-    this.width = width;
-    this.height = height;
     this.template = template;
 
     this.visible = visible;
     this.draggable = draggable;
     this.resizeable = resizeable;
-    this.content = content;
     this.title = title;
     this.className = className;
     this.listeners = listeners;
@@ -141,6 +108,14 @@ export class Component {
   addStyles(styles) {
     Object.assign(this.styles, styles);
   }
+  
+  addListener(eventName, handle) {
+    this.listeners[eventName] = handle;
+    if (this.isRendered) {
+      this.getDom().on(eventName, handle);
+    }
+    return this;
+  }
 
   appendChild(child, parentTag) {
     this.children.push(child);
@@ -209,10 +184,13 @@ export class Component {
   }
   
   destroy() {
+    (this.listeners['beforeDestroy'] || function(){})();
     this.getDom().remove();
     if (this.parent)
       this.parent.removeChild(this);
+    Registry.unregister(this);
     delete this;
+    (this.listeners['afterDestroy'] || function(){})();
   }
 
   toggle() {

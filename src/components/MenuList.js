@@ -5,8 +5,8 @@ export class MenuList extends Component {
     super({
       styles: {
         listStyle: 'none',
-        float:'left',
-        marginLeft:'20px'
+        float: 'left',
+        marginLeft: '20px'
       },
       name: 'MenuList',
       className: 'menulist',
@@ -24,46 +24,18 @@ export class MenuList extends Component {
     minicon3.setProps({
       iconSrc: "assets/windows-7-system-icon.png",
     });
-    this.appendChild(minicon1);
-    this.appendChild(minicon2);
-    this.appendChild(minicon3);
-    this.appendChild(minicon1);
-    this.appendChild(minicon2);
-    this.appendChild(minicon3);
-    this.appendChild(minicon1);
-    this.appendChild(minicon2);
-    this.appendChild(minicon3);
-    this.appendChild(minicon1);
-    this.appendChild(minicon2);
-    this.appendChild(minicon3);
-    this.appendChild(minicon1);
-    this.appendChild(minicon2);
-    this.appendChild(minicon3);
-    this.appendChild(minicon1);
-    this.appendChild(minicon2);
-    this.appendChild(minicon3);
-    this.appendChild(minicon2);
-    this.appendChild(minicon3);
-    this.appendChild(minicon1);
-    this.appendChild(minicon2);
-    this.appendChild(minicon3);
-    this.appendChild(minicon1);
-    this.appendChild(minicon2);
-    this.appendChild(minicon3);
-    this.appendChild(minicon1);
-    this.appendChild(minicon2);
-    this.appendChild(minicon2);
 
 
   }
+
   appendChild(child, parentTag) {
     this.children.push(child);
     child.parent = this;
     child.parentTag = parentTag;
-    var MenuListWidth=window.screen.availWidth-500;
-    var iconWidth=MenuListWidth/this.children.length;
-    for(let child of this.children){
-        child.addStyles({width:iconWidth+'px'});
+    var MenuListWidth = window.screen.availWidth - 500;
+    var iconWidth = MenuListWidth / this.children.length;
+    for (let child of this.children) {
+      child.addStyles({width: iconWidth + 'px'});
     }
     /* if parent is already rendered, render this comp */
     if (this.isRendered) {
