@@ -32,7 +32,7 @@ export class MenuList extends Component {
     this.children.push(child);
     child.parent = this;
     child.parentTag = parentTag;
-    var MenuListWidth = window.screen.availWidth - 500;
+    var MenuListWidth = window.screen.availWidth - 200;
     var iconWidth = MenuListWidth / this.children.length;
     for (let child of this.children) {
       child.addStyles({width: iconWidth + 'px'});

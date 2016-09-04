@@ -21,7 +21,6 @@ export class Component {
     name = '',
     props = {},
     afterRender = function () {
-
     }
     } = {}) {
     this.id = '__comp__' + Util.generateId();
@@ -53,56 +52,6 @@ export class Component {
 
   getDom() {
     return $('#' + this.id);
-  }
-
-  setWidth(width) {
-    this.width = width;
-    if (this.isRendered) {
-      this.getDom().css('width', width);
-    }
-    return this;
-  }
-
-  setHeight(height) {
-    this.height = height;
-    if (this.isRendered) {
-      this.getDom().css('height', height);
-    }
-    return this;
-  }
-
-  setLeft(x) {
-    this.left = x;
-    if (this.isRendered) {
-      this.getDom().css('left', x);
-    }
-    return this;
-  }
-
-  setTop(y) {
-    this.top = y;
-    if (this.isRendered) {
-      this.getDom().css('top', y);
-    }
-    return this;
-  }
-
-  setZindex(z) {
-    this.zindex = z;
-    if (this.isRendered) {
-      this.getDom().css('zIndex', z);
-    }
-    return this;
-  }
-
-  setParent(parent) {
-    this.parent = parent;
-    parent.children.push(this);
-    return this;
-  }
-  
-  setStyles(styles) {
-    this.styles = styles;
   }
 
   addStyles(styles) {
