@@ -1,7 +1,41 @@
 import Util from './Util';
 import $ from '../../node_modules/jquery';
 import Handlebars from '../../node_modules/handlebars/dist/handlebars';
-import {Registry} from './Registry'
+import {Registry} from './Registry';
+
+function addStyleUnit(styles) {
+  var out = {};
+  for (var i in styles) {
+    if (-1 !== $.inArray(i, ['top', 'left', 'width', 'height'])) {
+      if ((-1 === (styles[i]+'').indexOf('px')) && (-1 === (styles[i]+'').indexOf('%'))) {
+        out[i] = styles[i] + 'px';
+      } else {
+        out[i] = styles[i];
+      }
+    } else {
+      out[i] = styles[i];
+    }
+
+  }
+  return out;
+}
+
+function getTopWindow() {
+  var top = null;
+  var zMax = 0;
+  var comps = Registry.getComponents();
+  for (var i in comps) {
+    if (comps[i].visible == false || comps[i].isRendered == false) {
+      continue;
+    }
+    var z = parseInt(comps[i].getDom().css('z-index'), 10);
+    if (zMax < z) {
+      zMax = z;
+      top = comps[i];
+    }
+  }
+  return top;
+}
 
 export class Component {
   constructor({
@@ -55,46 +89,6 @@ export class Component {
     return $('#' + this.id);
   }
 
-  setWidth(width) {
-    this.width = width;
-    if (this.isRendered) {
-      this.getDom().css('width', width);
-    }
-    return this;
-  }
-
-  setHeight(height) {
-    this.height = height;
-    if (this.isRendered) {
-      this.getDom().css('height', height);
-    }
-    return this;
-  }
-
-  setLeft(x) {
-    this.left = x;
-    if (this.isRendered) {
-      this.getDom().css('left', x);
-    }
-    return this;
-  }
-
-  setTop(y) {
-    this.top = y;
-    if (this.isRendered) {
-      this.getDom().css('top', y);
-    }
-    return this;
-  }
-
-  setZindex(z) {
-    this.zindex = z;
-    if (this.isRendered) {
-      this.getDom().css('zIndex', z);
-    }
-    return this;
-  }
-
   setParent(parent) {
     this.parent = parent;
     parent.children.push(this);
@@ -129,6 +123,9 @@ export class Component {
   }
 
   render(parentDom) {
+    if (this.isRendered) {
+      return;
+    }
     if (!parentDom) {
       parentDom = $('body');
     }
@@ -138,7 +135,8 @@ export class Component {
     if (!this.visible) {
       this.styles.display = 'none';
     }
-    Object.assign(dom.style, this.styles);
+    var sts = addStyleUnit(this.styles);
+    Object.assign(dom.style, sts);
     var template = Handlebars.compile(this.template);
     var html = template(this);
     dom.innerHTML = html;
@@ -147,6 +145,7 @@ export class Component {
     } else {
       $(parentDom).append(dom);
     }
+    
     var self = this;
     this.children.map(function (child) {
       child.render(self.getDom());
@@ -156,6 +155,11 @@ export class Component {
     }
     this.isRendered = true;
     this.afterRender(this);
+  }
+
+  setActive() {
+    $(this.tagName + '.active').removeClass('active');
+    this.getDom().addClass('active');
   }
 
   show(parentDom) {
@@ -172,6 +176,10 @@ export class Component {
   hide() {
     this.getDom().hide();
     this.visible = false;
+    var topWindow = getTopWindow();
+    if (topWindow) {
+      topWindow.setActive();
+    }
   }
   
   removeChild(comp) {
@@ -191,6 +199,11 @@ export class Component {
     Registry.unregister(this);
     delete this;
     (this.listeners['afterDestroy'] || function(){})();
+
+    var topWindow = getTopWindow();
+    if (topWindow) {
+      topWindow.setActive();
+    }
   }
 
   toggle() {

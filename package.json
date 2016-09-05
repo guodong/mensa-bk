@@ -17,6 +17,7 @@
     "babel-loader": "^6.2.5",
     "babel-preset-es2015": "^6.13.2",
     "css-loader": "^0.23.1",
+    "grunt": "^1.0.1",
     "handlebars": "^4.0.5",
     "interact.js": "^1.2.6",
     "jquery": "^3.1.0",

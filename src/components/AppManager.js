@@ -19,6 +19,8 @@ export class AppManager {
         config: appconfig
       });
       apps.push(app);
+      
+      /* add icon to desktop */
       var icon = new Icon();
       icon.setHandle(function() {
         app.run();
@@ -28,7 +30,19 @@ export class AppManager {
         iconName: appconfig.name
       });
       Registry.findComponentByName('IconList').appendChild(icon);
+      
+      /**
+       * equals to:
+       * if (cb) {
+          cb(app);
+        } else {
+          function(app){}
+        }
+
+       () => {} equals to function(){}
+       */
       (cb || (() => {}))(app);
+      
     });
   }
 
