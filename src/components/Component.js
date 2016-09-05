@@ -55,7 +55,6 @@ export class Component {
     name = '',
     props = {},
     afterRender = function () {
-
     }
     } = {}) {
     this.id = '__comp__' + Util.generateId();

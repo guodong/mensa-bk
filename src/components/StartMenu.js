@@ -46,10 +46,14 @@ export class StartMenu extends Component {
       `
     });
     var self = this;
+    //var contextmenu = Registry.findComponentByName('contextmenu');
     $(document).on('click', function(e) {
       if (!self.getDom().has(e.target).length && !Registry.findComponentByName('startbtn').getDom().has(e.target).length) {
         self.hide();
       }
+    //  $('.contextmenu').hide();
+    //  $('.contextmenu').destroy();
     })
+
   }
 }

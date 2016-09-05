@@ -4,7 +4,7 @@ import {App} from './App';
 import {ProcessManager} from './ProcessManager';
 import {Icon} from './Icon';
 import {Registry} from './Registry';
-
+import {ContextMenu} from './ContextMenu';
 var apps = [];
 
 export class AppManager {

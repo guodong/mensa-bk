@@ -3,7 +3,7 @@ import {Window} from './Window';
 import {Registry} from './Registry';
 import {MenuList} from './MenuList';
 import {MinIcon} from './MinIcon';
-
+import {ContextMenu} from './ContextMenu';
 var pid = 1;
 var processes = [];
 
@@ -24,8 +24,14 @@ export class ProcessManager {
     icon.setProps({
       iconSrc: app.url + '/icon.png'
     });
+
+
+
     Registry.findComponentByName('MenuList').appendChild(icon);
     process.taskicon = icon;
+
+
+
   }
   
 }

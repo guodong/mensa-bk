@@ -5,6 +5,8 @@ import {StartMenu} from './StartMenu';
 import {IconList} from './IconList';
 import {Registry} from './Registry';
 import $ from '../../node_modules/jquery';
+import {ContextMenuItem} from './ContextMenuItem';
+
 
 function getActiveWindow() {
   var id = $('window.active').attr('id');
@@ -100,7 +102,6 @@ export class Desktop extends Component {
 
     var iconlist = new IconList();
     this.appendChild(iconlist);
+
   }
-
-
 }
