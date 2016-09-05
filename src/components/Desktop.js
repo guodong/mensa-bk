@@ -3,6 +3,10 @@ import {Window} from './Window';
 import {Menubar} from './Menubar';
 import {StartMenu} from './StartMenu';
 import {IconList} from './IconList';
+import {Registry} from './Registry';
+import $ from '../../node_modules/jquery';
+
+import {ContextMenuItem} from './ContextMenuItem';
 
 export class Desktop extends Component {
   constructor(props) {
@@ -26,7 +30,6 @@ export class Desktop extends Component {
 
     var iconlist = new IconList();
     this.appendChild(iconlist);
+
   }
-
-
 }

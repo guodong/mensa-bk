@@ -3,7 +3,6 @@ import {Registry} from './Registry';
 import {MenuList} from './MenuList';
 export class Menubar extends Component {
   constructor() {
-
     super({
       styles: {
         width: '100%',
@@ -43,9 +42,6 @@ export class Menubar extends Component {
     var menuList=new MenuList();
     this.appendChild(menuList);
 
-
-
-
     var datetime = new Component({
       styles: {
         width: '70px',
@@ -55,10 +51,9 @@ export class Menubar extends Component {
         textAlign: 'center',
         padding: '5px'
       },
-      template: '<div class="time">{{props.time}}</div><div class="date">{{props.date}}</div>'
+      template: '<div class="time"></div><div class="date"></div>'
 
     });
-
 
     function startTime(){
       var m = new Date();
@@ -69,8 +64,8 @@ export class Menubar extends Component {
     }
     startTime();
     var t = setInterval(startTime, 1000);
-
-
     this.appendChild(datetime, 'datetime');
+
+
   }
 }
