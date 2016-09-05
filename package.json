@@ -4,7 +4,7 @@
   "description": "mensa",
   "main": "index.js",
   "scripts": {
-    "build": "webpack",
+    "build": "webpack --minimize",
     "dev": "webpack-dev-server --progress --colors --content-base build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

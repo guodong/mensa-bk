@@ -1,5 +1,11 @@
 var path = require('path');
+var webpack = require('webpack');
 
+var minimize = process.argv.indexOf('--minimize') !== -1;
+var plugins = [];
+if (minimize) {
+  plugins.push(new webpack.optimize.UglifyJsPlugin());
+}
 module.exports = {
   entry: [path.resolve(__dirname, './src/main.js')],
   output: {
@@ -17,5 +23,6 @@ module.exports = {
       test: /\.less/,
       loader: "style!css!less"
     },{test: /\.css$/, loader: 'style!css'},]
-  }
+  },
+  plugins: plugins
 }
