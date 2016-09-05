@@ -2,6 +2,12 @@ import {Component} from './Component';
 import Handlebars from '../../node_modules/handlebars/dist/handlebars';
 import $ from '../../node_modules/jquery';
 import interact from '../../node_modules/interact.js/interact'
+import Util from './Util';
+// import Decoder from '../lib/Decoder';
+// import WebGLCanvas from '../lib/WebGLCanvas';
+// import Player from '../lib/Player';
+
+
 
 Handlebars.registerHelper('size', function(size) {
   if (size === 'auto') {
@@ -30,7 +36,8 @@ export class Window extends Component {
     bare = false,
     styles = {},
     content = '',
-    process = null
+    process = null,
+    type = 'normal'
   } = {}) {
     super({
       tagName: 'window',
@@ -110,7 +117,22 @@ export class Window extends Component {
       afterDestroy() {
         self.process.worker.postMessage({msg: 'destroy', payload: self.id});
       }
+    };
+
+    this.type = type;
+
+    /* create canvas */
+    var canvas = document.createElement('canvas');
+    canvas.style.backgroundColor = "#0D0E1B";
+    this.canvas = canvas;
+    if (this.styles.width != 0 && this.styles.height != 0)
+      this.imageData = canvas.getContext('2d').createImageData(this.styles.width, this.styles.height);
+    this.canvasObj = {
+      canvas: canvas,
     }
+    this.startRender = true;
+    this.rtime = 0;
+    this.renderCheckHandle = null;
   }
 
 
@@ -147,6 +169,25 @@ export class Window extends Component {
   setContent(content) {
     this.content = content;
     return this;
+  }
+
+  
+  configure(styles) {
+    var self = this;
+    var setStartRender = function() {
+      self.startRender = true;
+      clearTimeout(self.renderCheckHandle);
+    }
+    this.startRender = false;
+    clearTimeout(this.renderCheckHandle);
+    this.renderCheckHandle = setTimeout(setStartRender, 400);
+    var window = this;
+    window.styles.left = styles.left;
+    window.styles.top = styles.top;
+    window.styles.width = styles.width;
+    window.styles.height = styles.height;
+    if (this.isRendered)
+      $('#' + this.id).css(styles);
   }
 
   maximize() {
@@ -188,6 +229,12 @@ export class Window extends Component {
 
   render(parentDom) {
     super.render(parentDom);
+    if (this.bare) {
+      this.getDom().addClass('bare');
+    }
+    if (this.type === 'cloudware') {
+      this.getDom().find('content').html(this.canvas);
+    }
     var self = this;
     this.getDom().find('close').on('click', function() {
       self.destroy();
@@ -198,6 +245,46 @@ export class Window extends Component {
     this.getDom().find('minimize').on('click', function() {
       self.minimize();
     });
+    $('window.active').removeClass('active');
+    self.getDom().addClass('active');
+    self.getDom().css('z-index', Util.generateZindex());
+    this.getDom().click(function() {
+      $('window.active').removeClass('active');
+      self.getDom().addClass('active');
+      self.getDom().css('z-index', Util.generateZindex());
+    });
+  }
+
+  renderFrame(options) {
+    var canvasObj = this.canvasObj;
+
+    var width = self.styles.width;//options.width || canvasObj.canvas.width;
+    var height = self.styles.height;//options.height || canvasObj.canvas.height;
+
+    var ctx = canvasObj.ctx;
+    var imgData = canvasObj.imgData;
+
+
+
+
+    if (!ctx) {
+      canvasObj.ctx = canvasObj.canvas.getContext('2d');
+      ctx = canvasObj.ctx;
+
+      canvasObj.imgData = ctx.createImageData(width, height);
+      imgData = canvasObj.imgData;
+    }
+    
+    if (canvasObj.canvas.width !== width || canvasObj.canvas.height !== height) {
+      canvasObj.canvas.width = width;
+      canvasObj.canvas.height = height;
+
+      canvasObj.imgData = ctx.createImageData(width, height);
+      imgData = canvasObj.imgData;
+    }
+
+    imgData.data.set(options.data);
+    ctx.putImageData(imgData, 0, 0);
   }
 
   toString() {

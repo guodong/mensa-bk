@@ -10,17 +10,13 @@ window {
   display: inline-block;
   border-radius: 5px;
 
-  -webkit-box-shadow: inset 0 0 1px #fff;
-  box-shadow: inset 0 0 1px #fff;
-  background-color: #619bb9;
 
-  background: -webkit-linear-gradient(top, rgba(50, 123, 165, 0.75), rgba(46, 75, 90, 0.75) 50%, rgba(92, 176, 220, 0.75));
-  background: -moz-linear-gradient(top, rgba(50, 123, 165, 0.75), rgba(46, 75, 90, 0.75) 50%, rgba(92, 176, 220, 0.75));
-  background: -o-linear-gradient(top, rgba(50, 123, 165, 0.75), rgba(46, 75, 90, 0.75) 50%, rgba(92, 176, 220, 0.75));
-  background: -ms-linear-gradient(top, rgba(50, 123, 165, 0.75), rgba(46, 75, 90, 0.75) 50%, rgba(92, 176, 220, 0.75));
-  background: linear-gradient(top, rgba(50, 123, 165, 0.75), rgba(46, 75, 90, 0.75) 50%, rgba(92, 176, 220, 0.75));
-
-  .drop-shadow(10px, 10px, 20px, 0.2);
+  &.bare {
+    top-row {
+      display: none;
+    }
+    border: 0;
+  }
 
   window-layout {
     display: table;

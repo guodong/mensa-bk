@@ -16,7 +16,8 @@ export class ProcessManager {
     var url = app.url + '/' + app.config.entry;
     var process = new Process({
       pid: pid++,
-      entry: url
+      entry: url,
+      app: app
     });
 
     var icon = new MinIcon({process: process});

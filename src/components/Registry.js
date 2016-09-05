@@ -6,6 +6,9 @@ var apps = [];
 
 export class Registry {
 
+  static getComponents() {
+    return components;
+  }
   /**
    * register a component to store
    * @param component
@@ -27,10 +30,19 @@ export class Registry {
       }
     }
   }
-  
+
   static findComponentByName(name) {
     for (var i in components) {
       if (components[i].name === name) {
+        return components[i];
+      }
+    }
+    return null;
+  }
+
+  static findComponentById(id) {
+    for (var i in components) {
+      if (components[i].id === id) {
         return components[i];
       }
     }
