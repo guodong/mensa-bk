@@ -1,0 +1,13 @@
+{
+  "name": "About",
+  "description": "",
+  "version": "0.0.1",
+  "authors": [
+    "guodong <gd@tongjo.com>"
+  ],
+  "license": "ISC",
+  "icons": {
+    "64x64": "/icon.png"
+  },
+  "entry": "entry.js"
+}

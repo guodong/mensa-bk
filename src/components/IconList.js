@@ -14,18 +14,6 @@ export class IconList extends Component {
       className: 'iconlist',
       tagName: 'ul'
     });
-    var icon2 = new Icon();
-    icon2.setProps({
-      iconSrc: "assets/trash-icon.png",
-      iconName: "回收站"
-    });
-    var icon3 = new Icon();
-    icon3.setProps({
-      iconSrc: "assets/windows-7-system-icon.png",
-      iconName: "我的电脑"
-    });
-    this.appendChild(icon3);
-    this.appendChild(icon2);
 
   }
 }

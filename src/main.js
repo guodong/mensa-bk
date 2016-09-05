@@ -8,5 +8,5 @@ var desktop = new Desktop({});
 desktop.show();
 
 // ProcessManager.run('http://localhost:8080/apps/monitor');
-AppManager.install('http://localhost:8082/About');
-AppManager.install('http://localhost:8082/Notepad');
+AppManager.install('/apps/About');
+//AppManager.install('http://localhost:8082/Notepad');

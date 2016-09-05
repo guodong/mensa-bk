@@ -122,13 +122,15 @@ export class Window extends Component {
     this.type = type;
 
     /* create canvas */
-    var canvas = document.createElement('canvas');
-    canvas.style.backgroundColor = "#0D0E1B";
-    this.canvas = canvas;
-    if (this.styles.width != 0 && this.styles.height != 0)
-      this.imageData = canvas.getContext('2d').createImageData(this.styles.width, this.styles.height);
-    this.canvasObj = {
-      canvas: canvas,
+    if (this.type == 'cloudware') {
+      var canvas = document.createElement('canvas');
+      canvas.style.backgroundColor = "#0D0E1B";
+      this.canvas = canvas;
+      if (this.styles.width != 0 && this.styles.height != 0)
+        this.imageData = canvas.getContext('2d').createImageData(this.styles.width, this.styles.height);
+      this.canvasObj = {
+        canvas: canvas,
+      }
     }
     this.startRender = true;
     this.rtime = 0;
@@ -171,6 +173,9 @@ export class Window extends Component {
     return this;
   }
 
+  isActive() {
+    this.getDom().hasClass('active');
+  }
   
   configure(styles) {
     var self = this;
