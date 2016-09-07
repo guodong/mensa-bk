@@ -1,6 +1,7 @@
 import {Component} from './Component';
 import {Registry} from './Registry';
 import $ from '../../node_modules/jquery';
+import {AppManager} from './AppManager';
 
 export class StartMenu extends Component {
   constructor() {
@@ -30,9 +31,11 @@ export class StartMenu extends Component {
         </div>
 	</div>
 	<ul class="sysdir">
-        <li class="user"><div class="frame" style="z-index: 43;">
-          <div class="frame-inner" style="z-index: 9;">
-          </div>
+        <li class="users">
+        <div class="frame" style="z-index: 43;">
+          <!--<div class="frame-inner" style="z-index: 9;">
+          </div>-->
+          
         </div>
       </li>
         <li><a href="#"><span>Documents</span></a></li>
@@ -45,11 +48,13 @@ export class StartMenu extends Component {
     </div>
       `
     });
+
     var self = this;
     $(document).on('click', function(e) {
       if (!self.getDom().has(e.target).length && !Registry.findComponentByName('startbtn').getDom().has(e.target).length) {
         self.hide();
       }
     })
+
   }
 }

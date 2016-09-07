@@ -3,6 +3,7 @@ import {Window} from './Window';
 import {Menubar} from './Menubar';
 import {StartMenu} from './StartMenu';
 import {IconList} from './IconList';
+import {AppManager} from './AppManager';
 
 export class Desktop extends Component {
   constructor(props) {
@@ -16,7 +17,7 @@ export class Desktop extends Component {
         backgroundSize: 'cover',
         display: 'block'
       },
-      template: ``
+   
     });
     var menubar = new Menubar();
     this.appendChild(menubar);
@@ -26,6 +27,10 @@ export class Desktop extends Component {
 
     var iconlist = new IconList();
     this.appendChild(iconlist);
+
+    AppManager.install('http://localhost:8082/About');
+    AppManager.install('http://localhost:8082/My');
+    AppManager.install('http://localhost:8082/Admin');
   }
 
 

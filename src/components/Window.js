@@ -3,24 +3,7 @@ import Handlebars from '../../node_modules/handlebars/dist/handlebars';
 import $ from '../../node_modules/jquery';
 import interact from '../../node_modules/interact.js/interact'
 
-Handlebars.registerHelper('size', function(size) {
-  if (size === 'auto') {
-    return 'auto';
-  }
-  var val = size + '';
-  if (-1 === val.indexOf('%')) {
-    return val + 'px';
-  }
-  return val;
-});
 
-Handlebars.registerHelper('exists', function(variable, options) {
-  if (typeof variable !== 'undefined') {
-    return options.fn(this);
-  } else {
-    return options.inverse(this);
-  }
-});
 
 
 export class Window extends Component {
