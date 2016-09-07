@@ -139,6 +139,12 @@ var Libmensa;
       (Libmensa.listeners[eventName] || function() {
       })(args);
     },
+    getScreenInfo: function(cb) {
+      makeRequest({
+        resource: 'screen',
+        action: 'get'
+      }, cb);
+    },
     ajax: function(opts) {
       var url = opts.url || '';
       var method = opts.method || 'GET';

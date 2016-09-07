@@ -4,16 +4,23 @@ var components = [];
 var data = {};
 var apps = [];
 
-export class Registry {
+export default class Registry {
+  constructor() {
+    
+  }
 
-  static getComponents() {
+  loadDefault() {
+    
+  }
+  
+  getComponents() {
     return components;
   }
   /**
    * register a component to store
    * @param component
    */
-  static register(component) {
+  register(component) {
     components.push(component);
   }
 
@@ -22,7 +29,7 @@ export class Registry {
    * @param component
    * @returns {Registry}
    */
-  static unregister(component) {
+  unregister(component) {
     for (var i in components) {
       if (components[i].id === component.id) {
         components.splice(i, 1);
@@ -31,7 +38,7 @@ export class Registry {
     }
   }
 
-  static findComponentByName(name) {
+  findComponentByName(name) {
     for (var i in components) {
       if (components[i].name === name) {
         return components[i];
@@ -40,7 +47,7 @@ export class Registry {
     return null;
   }
 
-  static findComponentById(id) {
+  findComponentById(id) {
     for (var i in components) {
       if (components[i].id === id) {
         return components[i];

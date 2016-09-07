@@ -1,9 +1,9 @@
-import {Component} from './Component';
-import {Window} from './Window';
-import {Menubar} from './Menubar';
-import {StartMenu} from './StartMenu';
+import {Component} from './../Component';
+import {Window} from './../Window';
+import {Menubar} from './../Taskbar';
+import {StartMenu} from './../StartMenu';
 import {IconList} from './IconList';
-import {Registry} from './Registry';
+import {Registry} from './../Registry';
 import $ from '../../node_modules/jquery';
 import {ContextMenuItem} from './ContextMenuItem';
 

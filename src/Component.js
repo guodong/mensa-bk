@@ -1,13 +1,13 @@
 import Util from './Util';
-import $ from '../../node_modules/jquery';
-import Handlebars from '../../node_modules/handlebars/dist/handlebars';
-import {Registry} from './Registry';
+import $ from '../node_modules/jquery';
+import Handlebars from '../node_modules/handlebars/dist/handlebars';
+import Base from './Base';
 
 function addStyleUnit(styles) {
   var out = {};
   for (var i in styles) {
     if (-1 !== $.inArray(i, ['top', 'left', 'width', 'height'])) {
-      if ((-1 === (styles[i]+'').indexOf('px')) && (-1 === (styles[i]+'').indexOf('%'))) {
+      if (typeof styles[i] === 'number') {
         out[i] = styles[i] + 'px';
       } else {
         out[i] = styles[i];
@@ -23,7 +23,7 @@ function addStyleUnit(styles) {
 function getTopWindow() {
   var top = null;
   var zMax = 0;
-  var comps = Registry.getComponents();
+  var comps = mensa.registry.getComponents();
   for (var i in comps) {
     if (comps[i].visible == false || comps[i].isRendered == false) {
       continue;
@@ -37,43 +37,39 @@ function getTopWindow() {
   return top;
 }
 
-export class Component {
+export default class Component extends Base {
   constructor({
-
+    visible = true,
     draggable = true,
     resizeable = true,
-    title = 'No title',
     className = '',
     bottom = undefined,
     listeners = {},
-    visible = true,
     template = '',
     tagName = 'component',
     styles = {},
     parent = null,
     parentTag = '',
     name = '',
-    props = {},
-    afterRender = function () {
-    }
+    props = {}
     } = {}) {
+    super({
+      listeners: listeners
+    });
     this.id = '__comp__' + Util.generateId();
-    Registry.register(this);
+    mensa.registry.register(this);
     this.template = template;
 
     this.visible = visible;
     this.draggable = draggable;
     this.resizeable = resizeable;
-    this.title = title;
     this.className = className;
-    this.listeners = listeners;
     this.tagName = tagName;
     this.styles = styles;
     this.parent = parent;
     this.parentTag = parentTag;
     this.name = name;
     this.props = props;
-    this.afterRender = afterRender;
 
     this.isRendered = false;
 
@@ -128,17 +124,20 @@ export class Component {
     if (!parentDom) {
       parentDom = $('body');
     }
+    /* create dom */
     var dom = document.createElement(this.tagName);
     dom.setAttribute('id', this.id);
     dom.setAttribute('class', this.className);
-    if (!this.visible) {
-      this.styles.display = 'none';
-    }
+
+    /* set styles */
     var sts = addStyleUnit(this.styles);
     Object.assign(dom.style, sts);
+
+    /* compile template */
     var template = Handlebars.compile(this.template);
     var html = template(this);
     dom.innerHTML = html;
+
     if (this.parentTag) {
       $(parentDom).find(this.parentTag).append(dom);
     } else {
@@ -153,7 +152,10 @@ export class Component {
       this.getDom().on(i, this.listeners[i]);
     }
     this.isRendered = true;
-    this.afterRender(this);
+    if (!this.visible) {
+      this.hide();
+    }
+    this.fire('afterRender');
   }
 
   setActive() {
@@ -162,9 +164,6 @@ export class Component {
   }
 
   show(parentDom) {
-    if (!parentDom) {
-      parentDom = $('body');
-    }
     if (!this.isRendered) {
       this.render(parentDom);
     }
@@ -195,7 +194,7 @@ export class Component {
     this.getDom().remove();
     if (this.parent)
       this.parent.removeChild(this);
-    Registry.unregister(this);
+    mensa.registry.unregister(this);
     delete this;
     (this.listeners['afterDestroy'] || function(){})();
 

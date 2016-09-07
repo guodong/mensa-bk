@@ -1,10 +1,9 @@
-import {Registry} from './Registry';
-import {Window} from './Window';
-import {WindowManager} from './WindowManager';
-import $ from '../../node_modules/jquery/dist/jquery';
+import Registry from './Registry';
+import WindowManager from './WindowManager';
+import $ from '../node_modules/jquery/dist/jquery';
 
 
-export class Process {
+export default class Process {
   constructor({
     pid = undefined,
     entry = null,
@@ -96,7 +95,7 @@ export class Process {
                 bare: payload.bare || false
               };
               var window = WindowManager.createWindow(opts);
-              Registry.findComponentByName('desktop').appendChild(window);
+              mensa.registry.findComponentByName('desktop').appendChild(window);
               self.windows.push(window);
               makeReply(request, window.id);
               break;

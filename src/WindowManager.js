@@ -1,8 +1,8 @@
-import {Window} from './Window';
+import Window from './Window';
 
 var windows = [];
 
-export class WindowManager {
+export default class WindowManager {
   static findWindowById(id) {
     for (var i in windows) {
       if (windows[i].id === id) {

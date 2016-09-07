@@ -1,5 +1,5 @@
-import {Component} from './Component';
-import {MinIcon} from './MinIcon';
+import Component from './../Component';
+import MinIcon from './MinIcon';
 export class MenuList extends Component {
   constructor() {
     super({

@@ -1,12 +1,48 @@
-import {Desktop} from './components/Desktop';
-import {AppManager} from './components/AppManager';
-import {Cloudware} from './components/Cloudware';
 import './styles/main.less';
+import Registry from './Registry';
+import ProcessManager from './ProcessManager';
+import AppManager from './AppManager';
+import DesktopManager from './DesktopManager';
+import WindowManager from './WindowManager';
+
+class Mensa {
+  constructor() {
+    this.version = 'v0.0.1';
+    this.config = {
+      defaultApps: [
+        'About'
+      ]
+    }
+  }
+
+  boot() {
+    var me = this;
+    this.registry = new Registry();
+    this.appManager = new AppManager();
+    this.processManager = new ProcessManager();
+    this.desktopManager = new DesktopManager();
+    this.desktopManager.createDesktop('desktop');
+
+    this.config.defaultApps.forEach(function(appName) {
+      me.appManager.install('apps/' + appName, function(app) {
+        //app.run();
+      });
+    });
+  }
+}
+
+/**
+ * mensa global entry
+ * Don't worry, be happy
+ */
+var mensa = new Mensa();
+window.mensa = mensa;
+mensa.boot();
 
 
-var desktop = new Desktop({});
-desktop.show();
+//var desktop = new Desktop({});
+//desktop.show();
 
 // ProcessManager.run('http://localhost:8080/apps/monitor');
-AppManager.install('/apps/About');
+//AppManager.install('/apps/About');
 //AppManager.install('http://localhost:8082/Notepad');

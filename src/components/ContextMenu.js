@@ -1,6 +1,5 @@
-import {Component} from './Component';
+import Component from './../Component';
 import {ContextMenuItem} from './ContextMenuItem';
-import {Registry} from './Registry';
 import $ from '../../node_modules/jquery';
 
 export class ContextMenu extends Component {
@@ -19,7 +18,7 @@ export class ContextMenu extends Component {
         fontFamily: 'Verdana'
       },
       listeners: {
-        click: function (e) {
+        click: function(e) {
           // e.stopPropagation();
         }
       },
@@ -29,14 +28,15 @@ export class ContextMenu extends Component {
     });
 
     var self = this;
-    this.afterRender = function () {
-      self.getDom().find('.close').on('click', function () {
+    this.on('afterRender', function() {
+      self.getDom().find('.close').on('click', function() {
         self.process.exit();
       });
-      self.getDom().find('.open').on('click', function () {
-        $("#"+self.iconId).dblclick();
+      self.getDom().find('.open').on('click', function() {
+        $("#" + self.iconId).dblclick();
       });
-    }
+    })
+
   }
 
 

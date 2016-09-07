@@ -1,11 +1,9 @@
 /**
  * Created by zhangliqing on 16/8/24.
  */
-import {Component} from './Component';
-import {ContextMenu} from './ContextMenu';
-import {Registry} from './Registry';
-import $ from '../../node_modules/jquery';
-export class Icon extends Component {
+import Component from './../Component';
+
+export default class Icon extends Component {
   constructor() {
     super({
       styles: {

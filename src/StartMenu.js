@@ -1,8 +1,7 @@
-import {Component} from './Component';
-import {Registry} from './Registry';
-import $ from '../../node_modules/jquery';
+import Component from './Component';
+import $ from '../node_modules/jquery';
 
-export class StartMenu extends Component {
+export default class StartMenu extends Component {
   constructor() {
     super({
       name: 'startmenu',
@@ -12,23 +11,30 @@ export class StartMenu extends Component {
         searchval: 'search cloudware!'
       },
       listeners: {
-        click: function(e) {
-          // e.stopPropagation();
+        afterRender: function(comp) {
+          comp.getDom().find('.notepad').click(function() {
+            var url = $(this).attr('app-url');
+            mensa.appManager.install(url, function(app) {
+              app.run();
+              mensa.registry.findComponentByName('startmenu').hide();
+            });
+          })
         }
       },
       template: `
       <div class="startpopup">
     <div class="applications">
         <ul>
-            <li><a href="#"><img src="assets/paint.jpg" alt="">Paint</a></li>
+            <li class="notepad" app-url="http://mensa-apps.cloudwarehub.com/Notepad"><a href="#"><img src="assets/notepad.jpg">Notepad</a></li>
         </ul>
         
         <div class="search">
             <form action="">
-            <input type="text" value="{{props.searchval}}" placeholder="Search programs and files">
+            <input type="text" placeholder="Search programs and files">
             </form>
         </div>
 	</div>
+	
 	<ul class="sysdir">
         <li class="user"><div class="frame" style="z-index: 43;">
           <div class="frame-inner" style="z-index: 9;">
@@ -36,11 +42,6 @@ export class StartMenu extends Component {
         </div>
       </li>
         <li><a href="#"><span>Documents</span></a></li>
-        <li><a href="#"><span>Pictures</span></a></li>
-        <li><a href="#"><span>Music</span></a></li>
-        <li><a href="#"><span>Computer</span></a></li>
-        <li><a href="#"><span>Network</span></a></li>
-        <li><a href="#"><span>Connect to</span></a></li>
     </ul>
     </div>
       `
@@ -48,11 +49,9 @@ export class StartMenu extends Component {
     var self = this;
     //var contextmenu = Registry.findComponentByName('contextmenu');
     $(document).on('click', function(e) {
-      if (!self.getDom().has(e.target).length && !Registry.findComponentByName('startbtn').getDom().has(e.target).length) {
+      if (!self.getDom().has(e.target).length && !mensa.registry.findComponentByName('startbtn').getDom().has(e.target).length) {
         self.hide();
       }
-    //  $('.contextmenu').hide();
-    //  $('.contextmenu').destroy();
     })
 
   }

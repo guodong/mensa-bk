@@ -1,6 +1,6 @@
-import {Component} from './Component';
-import {Icon} from './Icon';
-export class IconList extends Component {
+import Component from './../Component';
+
+export default class IconList extends Component {
   constructor() {
     super({
       styles: {

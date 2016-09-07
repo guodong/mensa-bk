@@ -1,35 +1,10 @@
-import {Component} from './Component';
-import Handlebars from '../../node_modules/handlebars/dist/handlebars';
-import $ from '../../node_modules/jquery';
-import interact from '../../node_modules/interact.js/interact'
+import Component from './Component';
+import Handlebars from '../node_modules/handlebars/dist/handlebars';
+import $ from '../node_modules/jquery';
+import interact from '../node_modules/interact.js/interact'
 import Util from './Util';
-// import Decoder from '../lib/Decoder';
-// import WebGLCanvas from '../lib/WebGLCanvas';
-// import Player from '../lib/Player';
 
-
-
-Handlebars.registerHelper('size', function(size) {
-  if (size === 'auto') {
-    return 'auto';
-  }
-  var val = size + '';
-  if (-1 === val.indexOf('%')) {
-    return val + 'px';
-  }
-  return val;
-});
-
-Handlebars.registerHelper('exists', function(variable, options) {
-  if (typeof variable !== 'undefined') {
-    return options.fn(this);
-  } else {
-    return options.inverse(this);
-  }
-});
-
-
-export class Window extends Component {
+export default class Window extends Component {
 
   constructor({
     title = 'New Window',
@@ -43,41 +18,43 @@ export class Window extends Component {
       tagName: 'window',
       styles: styles,
       visible: false,
-      afterRender: function(comp) {
-        interact('#' + comp.id + ' top').draggable({
-          onmove: function(event) {
-            var target = event.target.parentNode.parentNode.parentNode, x = (parseFloat(target.style.left) || 0) + event.dx, y = (parseFloat(target.style.top) || 0) + event.dy;
-            target.style.left = x + 'px';
-            target.style.top = y + 'px';
+      listeners: {
+        afterRender: function(comp) {
+          interact('#' + comp.id + ' top').draggable({
+            onmove: function(event) {
+              var target = event.target.parentNode.parentNode.parentNode, x = (parseFloat(target.style.left) || 0) + event.dx, y = (parseFloat(target.style.top) || 0) + event.dy;
+              target.style.left = x + 'px';
+              target.style.top = y + 'px';
 
-          },
-        }).styleCursor(false);
-        interact('#' + comp.id).resizable({
-          edges: {
-            left: true,
-            right: true,
-            bottom: true,
-            top: false
-          }
-        }).on('resizemove', function(event) {
-          var target = event.target, x = (parseFloat(target.getAttribute('data-resize-x')) || 0), y = (parseFloat(target.getAttribute('data-resize-y')) || 0);
+            },
+          }).styleCursor(false);
+          interact('#' + comp.id).resizable({
+            edges: {
+              left: true,
+              right: true,
+              bottom: true,
+              top: false
+            }
+          }).on('resizemove', function(event) {
+            var target = event.target, x = (parseFloat(target.getAttribute('data-resize-x')) || 0), y = (parseFloat(target.getAttribute('data-resize-y')) || 0);
 
-          // update the element's style
-          target.style.width = event.rect.width + 'px';
-          target.style.height = event.rect.height + 'px';
+            // update the element's style
+            target.style.width = event.rect.width + 'px';
+            target.style.height = event.rect.height + 'px';
 
-          self.width = event.rect.width;
-          self.height = event.rect.height;
+            self.width = event.rect.width;
+            self.height = event.rect.height;
 
-          // translate when resizing from top or left edges
-          x += event.deltaRect.left;
-          y += event.deltaRect.top;
+            // translate when resizing from top or left edges
+            x += event.deltaRect.left;
+            y += event.deltaRect.top;
 
-          target.style.webkitTransform = target.style.transform = 'translate(' + x + 'px,' + y + 'px)';
+            target.style.webkitTransform = target.style.transform = 'translate(' + x + 'px,' + y + 'px)';
 
-          target.setAttribute('data-resize-x', x);
-          target.setAttribute('data-resize-y', y);
-        });
+            target.setAttribute('data-resize-x', x);
+            target.setAttribute('data-resize-y', y);
+          });
+        }
       }
     });
     this.title = title;
@@ -113,11 +90,9 @@ export class Window extends Component {
         
     `;
     var self = this;
-    this.listeners = {
-      afterDestroy() {
-        self.process.worker.postMessage({msg: 'destroy', payload: self.id});
-      }
-    };
+    this.on('afterDestroy', function() {
+      self.process.worker.postMessage({msg: 'destroy', payload: self.id});
+    });
 
     this.type = type;
 
@@ -125,6 +100,8 @@ export class Window extends Component {
     if (this.type == 'cloudware') {
       var canvas = document.createElement('canvas');
       canvas.style.backgroundColor = "#0D0E1B";
+      canvas.width = 1;
+      canvas.height = 1;
       this.canvas = canvas;
       if (this.styles.width != 0 && this.styles.height != 0)
         this.imageData = canvas.getContext('2d').createImageData(this.styles.width, this.styles.height);
@@ -176,7 +153,7 @@ export class Window extends Component {
   isActive() {
     this.getDom().hasClass('active');
   }
-  
+
   configure(styles) {
     var self = this;
     var setStartRender = function() {
@@ -270,8 +247,6 @@ export class Window extends Component {
     var imgData = canvasObj.imgData;
 
 
-
-
     if (!ctx) {
       canvasObj.ctx = canvasObj.canvas.getContext('2d');
       ctx = canvasObj.ctx;
@@ -279,7 +254,7 @@ export class Window extends Component {
       canvasObj.imgData = ctx.createImageData(width, height);
       imgData = canvasObj.imgData;
     }
-    
+
     if (canvasObj.canvas.width !== width || canvasObj.canvas.height !== height) {
       canvasObj.canvas.width = width;
       canvasObj.canvas.height = height;

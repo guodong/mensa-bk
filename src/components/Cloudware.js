@@ -1,4 +1,4 @@
-import {Registry} from './Registry';
+import {Registry} from './../Registry';
 import $ from '../../node_modules/jquery/dist/jquery'
 
 export class Cloudware {

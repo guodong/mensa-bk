@@ -1,4 +1,4 @@
-import uuid from '../../node_modules/uuid/uuid';
+import uuid from '../node_modules/uuid/uuid';
 import {AppManager} from './AppManager';
 
 export class App {
@@ -13,6 +13,6 @@ export class App {
   }
   
   run() {
-    AppManager.run(this);
+    mensa.appManager.run(this);
   }
 }

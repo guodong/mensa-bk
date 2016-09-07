@@ -1,7 +1,7 @@
-import {Component} from './Component';
-import {Registry} from './Registry';
-import {MenuList} from './MenuList';
-export class Menubar extends Component {
+import Component from './Component';
+import Registry from './Registry';
+import {MenuList} from './components/MenuList';
+export default class Taskbar extends Component {
   constructor() {
     super({
       styles: {
@@ -33,7 +33,7 @@ export class Menubar extends Component {
       },
       listeners: {
         click() {
-          Registry.findComponentByName('startmenu').toggle();
+          mensa.registry.findComponentByName('startmenu').toggle();
         }
       }
     });

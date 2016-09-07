@@ -1,14 +1,12 @@
-import $ from '../../node_modules/jquery/dist/jquery';
-import _uuid from '../../node_modules/uuid/uuid';
+import $ from '../node_modules/jquery/dist/jquery';
+import _uuid from '../node_modules/uuid/uuid';
 import {App} from './App';
-import {ProcessManager} from './ProcessManager';
-import {Icon} from './Icon';
-import {Registry} from './Registry';
-import {ContextMenu} from './ContextMenu';
+import Icon from './components/Icon';
+import Registry from './Registry';
 var apps = [];
 
-export class AppManager {
-  static install(url, cb) {
+export default class AppManager {
+  install(url, cb) {
     $.getJSON(url + '/mensa.json').fail(() => {
       cb({errno: 1, msg: 'no such app'});
     }).done((appconfig) => {
@@ -29,7 +27,7 @@ export class AppManager {
         iconSrc: url + '/icon.png',
         iconName: appconfig.name
       });
-      Registry.findComponentByName('IconList').appendChild(icon);
+      mensa.registry.findComponentByName('IconList').appendChild(icon);
       
       /**
        * equals to:
@@ -50,7 +48,7 @@ export class AppManager {
    * run app, this is final entry to run app
    * @App app
    */
-  static run(app) {
-    ProcessManager.run(app);
+  run(app) {
+    mensa.processManager.run(app);
   }
 }
