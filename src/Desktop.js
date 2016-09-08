@@ -26,11 +26,11 @@ export default class Desktop extends Component {
       listeners: {
         afterRender: function() {
           $(document).on('mousemove', function(e) {
-            var window = getActiveWindow();
-            if (!window) {
+            var process = mensa.processManager.getActiveProcess();
+            if (!process) {
               return;
             }
-            window.process.worker.postMessage({
+            process.worker.postMessage({
               msg: 'mousemove',
               payload: {
                 id: self.id,
@@ -40,11 +40,11 @@ export default class Desktop extends Component {
             })
           });
           $(document).on('mousedown', function(e) {
-            var window = getActiveWindow();
-            if (!window) {
+            var process = mensa.processManager.getActiveProcess();
+            if (!process) {
               return;
             }
-            window.process.worker.postMessage({
+            process.worker.postMessage({
               msg: 'mousedown',
               payload: {
                 code: e.which
@@ -52,11 +52,11 @@ export default class Desktop extends Component {
             })
           });
           $(document).on('mouseup', function(e) {
-            var window = getActiveWindow();
-            if (!window) {
+            var process = mensa.processManager.getActiveProcess();
+            if (!process) {
               return;
             }
-            window.process.worker.postMessage({
+            process.worker.postMessage({
               msg: 'mouseup',
               payload: {
                 code: e.which
@@ -64,11 +64,11 @@ export default class Desktop extends Component {
             })
           });
           $(document).on('keydown', function(e) {
-            var window = getActiveWindow();
-            if (!window) {
+            var process = mensa.processManager.getActiveProcess();
+            if (!process) {
               return;
             }
-            window.process.worker.postMessage({
+            process.worker.postMessage({
               msg: 'keydown',
               payload: {
                 code: e.which
@@ -76,11 +76,11 @@ export default class Desktop extends Component {
             })
           });
           $(document).on('keyup', function(e) {
-            var window = getActiveWindow();
-            if (!window) {
+            var process = mensa.processManager.getActiveProcess();
+            if (!process) {
               return;
             }
-            window.process.worker.postMessage({
+            process.worker.postMessage({
               msg: 'keyup',
               payload: {
                 code: e.which

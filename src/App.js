@@ -5,10 +5,12 @@ export class App {
   constructor({
     id = uuid.v4(),
     url = '',
+    type = 'default',
     config = {}
   } = {}) {
     this.id = id;
     this.url = url;
+    this.type = type;
     this.config = config;
   }
   

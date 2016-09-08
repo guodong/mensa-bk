@@ -3,7 +3,7 @@ import Window from './Window';
 var windows = [];
 
 export default class WindowManager {
-  static findWindowById(id) {
+  findWindowById(id) {
     for (var i in windows) {
       if (windows[i].id === id) {
         return windows[i];
@@ -12,7 +12,7 @@ export default class WindowManager {
     return null;
   }
   
-  static createWindow(opts) {
+  createWindow(opts) {
     var window = new Window(opts);
     windows.push(window);
     return window;

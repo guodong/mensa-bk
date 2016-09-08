@@ -160,11 +160,6 @@ export default class Component extends Base {
     this.fire('afterRender');
   }
 
-  setActive() {
-    $(this.tagName + '.active').removeClass('active');
-    this.getDom().addClass('active');
-  }
-
   show(parentDom) {
     if (!this.isRendered) {
       this.render(parentDom);
@@ -176,10 +171,6 @@ export default class Component extends Base {
   hide() {
     this.getDom().hide();
     this.visible = false;
-    var topWindow = getTopWindow();
-    if (topWindow) {
-      topWindow.setActive();
-    }
   }
   
   removeChild(comp) {
@@ -200,10 +191,6 @@ export default class Component extends Base {
     delete this;
     (this.listeners['afterDestroy'] || function(){})();
 
-    var topWindow = getTopWindow();
-    if (topWindow) {
-      topWindow.setActive();
-    }
   }
 
   toggle() {

@@ -1,7 +1,5 @@
-import Registry from './Registry';
-import WindowManager from './WindowManager';
 import $ from '../node_modules/jquery/dist/jquery';
-
+import Mask from './components/Mask';
 
 export default class Process {
   constructor({
@@ -24,6 +22,10 @@ export default class Process {
 
     var self = this;
 
+    if (this.app.type == 'cloudware') {
+      this.mask = new Mask();
+      this.mask.show();
+    }
 
 
     var worker = new Worker('/loader.js');
@@ -37,8 +39,15 @@ export default class Process {
     }
 
     this.worker = worker;
-    worker.postMessage(entry);
+
+    worker.postMessage({entry: entry, version_id: this.app.config.id});
+    var me = this;
     worker.onmessage = function(msg) {
+      if (me.mask) {
+        me.mask.hide();
+        me.mask.destroy();
+        me.mask = null;
+      }
       var request = msg.data;
       var resource = request.resource,
         action = request.action,
@@ -94,13 +103,14 @@ export default class Process {
                 type: payload.type || 'normal',
                 bare: payload.bare || false
               };
-              var window = WindowManager.createWindow(opts);
+              var window = mensa.windowManager.createWindow(opts);
               mensa.registry.findComponentByName('desktop').appendChild(window);
               self.windows.push(window);
               makeReply(request, window.id);
               break;
             case 'show':
-              var window = WindowManager.findWindowById(payload);console.log('show', payload)
+              var window = mensa.windowManager.findWindowById(payload);
+              console.log('show', payload)
               if (window) {
                 window.show();
               }
@@ -110,18 +120,18 @@ export default class Process {
               $('#' + payload).hide();
               break;
             case 'configure':
-              var window = WindowManager.findWindowById(payload.id);
+              var window = mensa.windowManager.findWindowById(payload.id);
               if (window) {
                 window.configure(payload.styles);
               }
 
               break;
             case 'destroy':
-              var window = WindowManager.findWindowById(payload);
+              var window = mensa.windowManager.findWindowById(payload);
               window.destroy();
               break;
             case 'renderFrame':
-              var window = WindowManager.findWindowById(payload.id);
+              var window = mensa.windowManager.findWindowById(payload.id);
               window.renderFrame({width: payload.width, height: payload.height, data: msg.data.buf});
           }
           break;

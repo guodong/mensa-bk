@@ -6,7 +6,7 @@ Libmensa.createWindow({
 	<p>Mensa is a project under CloudwareHub. This is a public demonstration version of Mensa</p>
 	<h2>More Info</h2>
 	<p>
-		Visit the&nbsp;<a href="https://github.com/cloudwarehub/mensa"
+		Visit the&nbsp;<a href="https://github.com/guodong/mensa"
 			target="_blank">Github page</a> or official&nbsp;<a
 			href="http://www.cloudwarehub.com" target="_blank">CloudwareHub</a>
 	</p>

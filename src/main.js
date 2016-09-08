@@ -5,11 +5,12 @@ import AppManager from './AppManager';
 import DesktopManager from './DesktopManager';
 import WindowManager from './WindowManager';
 import Login from './components/Login';
+import Mask from './components/Mask';
 
 class Mensa {
   constructor() {
     this.version = 'v0.0.1';
-    this.api = 'http://localhost:3000';
+    this.api = 'http://apiv2.cloudwarehub.com';
     this.config = {
       defaultApps: [
         'About'
@@ -23,9 +24,11 @@ class Mensa {
     this.appManager = new AppManager();
     this.processManager = new ProcessManager();
     this.desktopManager = new DesktopManager();
+    this.windowManager = new WindowManager();
     // this.loginUi = new Login();
     // this.loginUi.show();
     this.desktopManager.createDesktop('desktop');
+
 
     this.config.defaultApps.forEach(function(appName) {
       me.appManager.install('apps/' + appName, function(app) {

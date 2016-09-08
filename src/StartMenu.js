@@ -19,31 +19,28 @@ export default class StartMenu extends Component {
             success: function(payload) {
               var ds = new Deserializer;
               ds.deserialize(payload, function(err, data) {
-                var item = new StartmenuItem({
-                  props: {
-                    name: 'ttt'
-                  },
-                  renderTo: comp.getDom().find('.applications ul')
+                data.forEach(function(version) {
+                  var item = new StartmenuItem(mensa.api + '/versions/' + version.id, {
+                    props: {
+                      name: version.cloudware.name,
+                      logo: mensa.api + '/uploads/' + version.cloudware.logo
+                    },
+                    renderTo: comp.getDom().find('.applications ul')
+                  });
+                  item.show();
                 });
-                item.show();
+
               });
 
             }
           });
-          comp.getDom().find('.notepad').click(function() {
-            var url = $(this).attr('app-url');
-            mensa.appManager.install(url, function(app) {
-              app.run();
-              mensa.registry.findComponentByName('startmenu').hide();
-            });
-          })
         }
       },
       template: `
       <div class="startpopup">
     <div class="applications">
         <ul id="app-list">
-            <li class="notepad" app-url="http://mensa-apps.cloudwarehub.com/Notepad"><a href="#"><img src="assets/notepad.jpg">Notepad</a></li>
+            
         </ul>
         
         <div class="search">

@@ -150,10 +150,6 @@ export default class Window extends Component {
     return this;
   }
 
-  isActive() {
-    this.getDom().hasClass('active');
-  }
-
   configure(styles) {
     var self = this;
     var setStartRender = function() {
@@ -162,7 +158,7 @@ export default class Window extends Component {
     }
     this.startRender = false;
     clearTimeout(this.renderCheckHandle);
-    this.renderCheckHandle = setTimeout(setStartRender, 400);
+    this.renderCheckHandle = setTimeout(setStartRender, 600);
     var window = this;
     window.styles.left = styles.left;
     window.styles.top = styles.top;
@@ -227,13 +223,11 @@ export default class Window extends Component {
     this.getDom().find('minimize').on('click', function() {
       self.minimize();
     });
-    $('window.active').removeClass('active');
-    self.getDom().addClass('active');
     self.getDom().css('z-index', Util.generateZindex());
+    
     this.getDom().click(function() {
-      $('window.active').removeClass('active');
-      self.getDom().addClass('active');
       self.getDom().css('z-index', Util.generateZindex());
+      mensa.processManager.setActiveProcess(self.process);
     });
   }
 

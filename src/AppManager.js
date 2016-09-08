@@ -2,7 +2,8 @@ import $ from '../node_modules/jquery/dist/jquery';
 import _uuid from '../node_modules/uuid/uuid';
 import {App} from './App';
 import Icon from './components/Icon';
-import Registry from './Registry';
+import {Deserializer} from '../node_modules/jsonapi-serializer';
+
 var apps = [];
 
 function findAppByUrl(url) {
@@ -56,6 +57,40 @@ export default class AppManager {
       (cb || (() => {}))(app);
       
     });
+  }
+
+  installCloudware(url, cb) {
+    var app = findAppByUrl(url);
+    if (app) {
+      cb(app);
+      return;
+    }
+    $.get(url).done((payload) => {
+      var ds = new Deserializer;
+      ds.deserialize(payload, function(err, data) {
+        console.log(data);
+        var uuid = _uuid.v4();
+        var app = new App({
+          id: uuid,
+          type: 'cloudware',
+          url: url,
+          config: data
+        });
+        apps.push(app);
+
+        /* add icon to desktop */
+        var icon = new Icon();
+        icon.setHandle(function() {
+          app.run();
+        });
+        icon.setProps({
+          iconSrc: mensa.api + '/uploads/' + data.cloudware.logo,
+          iconName: data.cloudware.name
+        });
+        mensa.registry.findComponentByName('IconList').appendChild(icon);
+        cb(app);
+      })
+    })
   }
 
   /**
