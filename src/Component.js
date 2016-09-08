@@ -51,7 +51,8 @@ export default class Component extends Base {
     parent = null,
     parentTag = '',
     name = '',
-    props = {}
+    props = {},
+    renderTo = null
     } = {}) {
     super({
       listeners: listeners
@@ -70,6 +71,7 @@ export default class Component extends Base {
     this.parentTag = parentTag;
     this.name = name;
     this.props = props;
+    this.renderTo = renderTo;
 
     this.isRendered = false;
 
@@ -122,7 +124,7 @@ export default class Component extends Base {
       return;
     }
     if (!parentDom) {
-      parentDom = $('body');
+      parentDom = this.renderTo ? this.renderTo : $('body');
     }
     /* create dom */
     var dom = document.createElement(this.tagName);

@@ -1,5 +1,7 @@
 import Component from './Component';
 import $ from '../node_modules/jquery';
+import {Deserializer} from '../node_modules/jsonapi-serializer';
+import StartmenuItem from './components/StartmenuItem';
 
 export default class StartMenu extends Component {
   constructor() {
@@ -12,6 +14,22 @@ export default class StartMenu extends Component {
       },
       listeners: {
         afterRender: function(comp) {
+          $.ajax({
+            url: mensa.api + '/versions',
+            success: function(payload) {
+              var ds = new Deserializer;
+              ds.deserialize(payload, function(err, data) {
+                var item = new StartmenuItem({
+                  props: {
+                    name: 'ttt'
+                  },
+                  renderTo: comp.getDom().find('.applications ul')
+                });
+                item.show();
+              });
+
+            }
+          });
           comp.getDom().find('.notepad').click(function() {
             var url = $(this).attr('app-url');
             mensa.appManager.install(url, function(app) {
@@ -24,7 +42,7 @@ export default class StartMenu extends Component {
       template: `
       <div class="startpopup">
     <div class="applications">
-        <ul>
+        <ul id="app-list">
             <li class="notepad" app-url="http://mensa-apps.cloudwarehub.com/Notepad"><a href="#"><img src="assets/notepad.jpg">Notepad</a></li>
         </ul>
         
@@ -38,6 +56,7 @@ export default class StartMenu extends Component {
 	<ul class="sysdir">
         <li class="user"><div class="frame" style="z-index: 43;">
           <div class="frame-inner" style="z-index: 9;">
+            <img src="assets/logo_default_430x430.jpg" style="width: 35px;">
           </div>
         </div>
       </li>

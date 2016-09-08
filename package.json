@@ -21,6 +21,7 @@
     "handlebars": "^4.0.5",
     "interact.js": "^1.2.6",
     "jquery": "^3.1.0",
+    "jsonapi-serializer": "^3.3.0",
     "less": "^2.7.1",
     "less-loader": "^2.2.3",
     "style-loader": "^0.13.1",

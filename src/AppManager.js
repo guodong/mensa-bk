@@ -5,8 +5,22 @@ import Icon from './components/Icon';
 import Registry from './Registry';
 var apps = [];
 
+function findAppByUrl(url) {
+  for (var i in apps) {
+    if (apps[i].url == url) {
+      return apps[i];
+    }
+  }
+  return null;
+}
+
 export default class AppManager {
   install(url, cb) {
+    var app = findAppByUrl(url);
+    if (app) {
+      cb(app);
+      return;
+    }
     $.getJSON(url + '/mensa.json').fail(() => {
       cb({errno: 1, msg: 'no such app'});
     }).done((appconfig) => {
