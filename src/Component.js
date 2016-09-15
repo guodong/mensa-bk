@@ -97,7 +97,9 @@ export default class Component extends Base {
   }
 
   addStyles(styles) {
-    Object.assign(this.styles, styles);
+    for (var i in styles) {
+      this.styles[i] = styles[i];
+    }
   }
   
   addListener(eventName, handle) {
@@ -133,7 +135,9 @@ export default class Component extends Base {
 
     /* set styles */
     var sts = addStyleUnit(this.styles);
-    Object.assign(dom.style, sts);
+    for (var i in sts) {
+      dom.style[i] = sts[i];
+    }
 
     /* compile template */
     var template = Handlebars.compile(this.template);
