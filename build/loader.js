@@ -65,8 +65,7 @@ var Libmensa;
       });
     },
     configure: function(opts) {
-      Object.assign(opts, {id: this.id});
-
+      opts[id] = this.id;
       var self = this;
       if (!this.id) {
         this.sendList.push(function() {
@@ -121,7 +120,9 @@ var Libmensa;
       action: null,
       payload: null
     };
-    Object.assign(request, req);
+    for (var i in req) {
+      request[i] = req[i];
+    }
     if (cb) {
       g_callbacks[request.seq] = cb;
     }
