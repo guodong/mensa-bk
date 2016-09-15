@@ -132,12 +132,12 @@ var wa=[Db,rb];var xa=[Eb,qb,sb,pb];var ya=[Fb,Ya,Xa,Fb];var za=[Gb,tb];return{_
       this.infoAr = [];
       
       if (this.options.rgb){
-        // if (!asmInstance){
+        if (!asmInstance){
           asmInstance = getAsm(width, height);
-        // };
-        if (width * height << 2 > buffer.length) {
-          buffer = buffer.slice(0, width * height << 2);
-        }
+        };
+        // if (width * height << 2 > buffer.length) {
+        //   buffer = buffer.slice(0, width * height << 2);
+        // }
         asmInstance.inp.set(buffer);
         asmInstance.doit();
 
