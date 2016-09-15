@@ -10,7 +10,8 @@
       CIP_EVENT_WINDOW_HIDE: 3,
       CIP_EVENT_WINDOW_CONFIGURE: 4,
       CIP_EVENT_WINDOW_FRAME: 15,
-      CIP_EVENT_EXIT: 16
+      CIP_EVENT_EXIT: 16,
+      CIP_EVENT_CURSOR: 17
     }
   };
 
@@ -21,7 +22,7 @@
       return;
     var wid = 0;
     switch (msg.data.msg) {
-      case 'mousemove':console.log('move')
+      case 'mousemove':
         var buf = new ArrayBuffer(9);
         var dv = new DataView(buf);
         dv.setUint8(0, 5, true);
@@ -96,7 +97,7 @@
       var ab = msg.data;
       var dv = new DataView(ab);
       switch (dv.getUint8(0)) {
-        case Cip.EVENT.CIP_EVENT_WINDOW_CREATE:console.log('create')
+        case Cip.EVENT.CIP_EVENT_WINDOW_CREATE:
           var cewc_dv = dv;
           var wid = cewc_dv.getUint32(1, true);
           var opts = {
@@ -113,11 +114,11 @@
             bare: cewc_dv.getUint8(13, true),
             type: 'cloudware',
             listenEvent: true
-          };console.log('create', opts.styles.left, opts.styles.top, opts.styles.width, opts.styles.height)
+          };
           Libmensa.createWindow(opts, function(window) {
           });
           break;
-        case Cip.EVENT.CIP_EVENT_WINDOW_SHOW: console.log('show')
+        case Cip.EVENT.CIP_EVENT_WINDOW_SHOW:
           var cews_dv = dv;
           var wid = cews_dv.getUint32(2, true);
           var opts = {
@@ -158,7 +159,7 @@
             },
             above: cewc_dv.getUint32(13, true),
             bare: cewc_dv.getUint8(17, true)
-          };console.log('configure', opts.styles.left, opts.styles.top, opts.styles.width, opts.styles.height);
+          };
           var window = Libmensa.findWindowByWid(wid);
           if (window) {
             window.configure(opts);
@@ -175,6 +176,14 @@
           break;
         case Cip.EVENT.CIP_EVENT_EXIT:
           Libmensa.exit();
+          break;
+        case Cip.EVENT.CIP_EVENT_CURSOR:
+          var opts = {
+            xspot: dv.getUint8(1),
+            yspot: dv.getUint8(2),
+            iconBuffer: ab.slice(3)
+          }
+          Libmensa.setCursor(opts);
           break;
         default:
           break;

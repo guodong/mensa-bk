@@ -1,6 +1,33 @@
 import $ from '../node_modules/jquery/dist/jquery';
 import Mask from './components/Mask';
 
+function encode (input) {
+  var keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+  var output = "";
+  var chr1, chr2, chr3, enc1, enc2, enc3, enc4;
+  var i = 0;
+
+  while (i < input.length) {
+    chr1 = input[i++];
+    chr2 = i < input.length ? input[i++] : Number.NaN; // Not sure if the index
+    chr3 = i < input.length ? input[i++] : Number.NaN; // checks are needed here
+
+    enc1 = chr1 >> 2;
+    enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
+    enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
+    enc4 = chr3 & 63;
+
+    if (isNaN(chr2)) {
+      enc3 = enc4 = 64;
+    } else if (isNaN(chr3)) {
+      enc4 = 64;
+    }
+    output += keyStr.charAt(enc1) + keyStr.charAt(enc2) +
+      keyStr.charAt(enc3) + keyStr.charAt(enc4);
+  }
+  return "data:image/x-icon;base64,"+output;
+}
+
 export default class Process {
   constructor({
     pid = undefined,
@@ -61,7 +88,6 @@ export default class Process {
               if (payload.width !== self.screen.width || payload.height !== self.screen.height) {
                 self.screen.width = payload.width;
                 self.screen.height = payload.height;
-                console.log(payload.width, payload.height)
                 self.screen.imageData = self.screen.canvas.getContext('2d').createImageData(payload.width, payload.height);
               }
               self.screen.imageData.data.set(payload.buffer);
@@ -75,6 +101,13 @@ export default class Process {
                 }
               });
               break;
+            case 'setCursor':
+              var cursor64 = encode(new Uint8Array(payload.iconBuffer));
+              /* 工字形鼠标返回空图片,特殊处理 */
+              if (cursor64.substr(39) == 'AAAADoAgAAFgAAACgAAAAgAAAAQAAAAAEABAAAAAAAgAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAACAAAAAgIAAgAAAAIAAgACAgAAAgICAAMDAwAAAAP8AAP8AAAD//wD/AAAA/wD/AP//AAD///8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP/w//AAAAAAAAAAAAAAAAAADwAAAAAAAAAAAAAAAAAAAA8AAAAAAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAAAAAADwAAAAAAAAAAAAAAAAAAAA8AAAAAAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAAAAAADwAAAAAAAAAAAAAAAAAAAA8AAAAAAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAAAAAADwAAAAAAAAAAAAAAAAAAAA8AAAAAAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAAAAAADwAAAAAAAAAAAAAAAAAAAA8AAAAAAAAAAAAAAAAAAP/w//AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////w=='){
+                cursor64 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAPElEQVRYhe3VsQoAIAhAQev//9n2lnAoqO42SeRtRfyuLd5z2p3no3K9Utd3HBUgQIAAAQIqrvqOAeBNA2bsBRzk+8IJAAAAAElFTkSuQmCC';
+              }
+              $("body").get(0).style.cursor = "url('"+ cursor64 +"')" + payload.xspot + ' ' + payload.yspot + ", auto";
           }
           break;
         case 'app':
@@ -84,6 +117,7 @@ export default class Process {
               break;
             case 'exit':
               self.exit();
+              $("body").get(0).style.cursor = 'default';
               break;
           }
 
@@ -110,7 +144,6 @@ export default class Process {
               break;
             case 'show':
               var window = mensa.windowManager.findWindowById(payload);
-              console.log('show', payload)
               if (window) {
                 window.show();
               }
@@ -128,7 +161,9 @@ export default class Process {
               break;
             case 'destroy':
               var window = mensa.windowManager.findWindowById(payload);
-              window.destroy();
+              if (window) {
+                window.destroy();
+              }
               break;
             case 'renderFrame':
               var window = mensa.windowManager.findWindowById(payload.id);

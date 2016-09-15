@@ -177,7 +177,7 @@ var Libmensa;
       }, cb);
     },
     renderFrame: function(buffer, width, height, info) {
-      var data = new Uint8Array(buffer);
+      // var data = new Uint8Array(buffer);
       var req = {
         seq: g_seq++,
         resource: 'screen',
@@ -185,11 +185,21 @@ var Libmensa;
         payload: {
           width: width,
           height: height,
-          buffer: data
+          buffer: buffer
         }
       };
       g_requests.push(req);
-      postMessage(req, [data.buffer]);
+      postMessage(req, [buffer.buffer]);
+    },
+    setCursor: function(opts) {
+      var req = {
+        seq: g_seq++,
+        resource: 'screen',
+        action: 'setCursor',
+        payload: opts
+      };
+      //g_requests.push(req);
+      postMessage(req, [opts.iconBuffer]);
     },
     createWindow: function(opts, cb) {
       var window = new Window();
@@ -222,20 +232,22 @@ var Libmensa;
       var seq = reply.seq;
       if (seq !== undefined) {
         var req = g_requests[seq];
-        
-        var param = msg.data.payload;
-        if (req.resource === 'window' && req.action === 'create') {
-          // var window = new Window(msg.data.payload);
-          // g_windows.push(window);
-          var window = Libmensa.findWindowByWid(req.payload.wid);
-          window.id = reply.payload;
-          for (var i in window.sendList) {
-            window.sendList[i]();
+        if (req) {
+          var param = msg.data.payload;
+          if (req.resource === 'window' && req.action === 'create') {
+            // var window = new Window(msg.data.payload);
+            // g_windows.push(window);
+            var window = Libmensa.findWindowByWid(req.payload.wid);
+            window.id = reply.payload;
+            for (var i in window.sendList) {
+              window.sendList[i]();
+            }
+            param = window;
           }
-          param = window;
+          (g_callbacks[seq] || function() {
+          })(param, req);
         }
-        (g_callbacks[seq] || function() {
-        })(param, req);
+
 
         // if (req.resource === 'window' && req.action === 'destroy') {
         //   var window = findWindow(msg.data.reply);
