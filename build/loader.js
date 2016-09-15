@@ -65,7 +65,7 @@ var Libmensa;
       });
     },
     configure: function(opts) {
-      opts[id] = this.id;
+      opts["id"] = this.id;
       var self = this;
       if (!this.id) {
         this.sendList.push(function() {
