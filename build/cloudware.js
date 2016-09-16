@@ -280,7 +280,7 @@
     });
   }
   Libmensa.ajax({
-    url: 'http://apiv2.cloudwarehub.com/instances',
+    url: '//apiv2.cloudwarehub.com/instances',
     method: 'POST',
     data: {
       data: {
