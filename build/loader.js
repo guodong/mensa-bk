@@ -107,7 +107,7 @@ var Libmensa;
         },
         buf: opts.data
       };
-      g_requests.push(req);
+      g_requests[req.seq] = req;
       postMessage(req, [opts.data.buffer]);
     }
   };
@@ -123,10 +123,11 @@ var Libmensa;
     for (var i in req) {
       request[i] = req[i];
     }
+    console.log(request);
     if (cb) {
       g_callbacks[request.seq] = cb;
     }
-    g_requests.push(request);
+    g_requests[request.seq] = request;
     postMessage(request);
   }
 
@@ -189,7 +190,7 @@ var Libmensa;
           buffer: buffer
         }
       };
-      g_requests.push(req);
+      g_requests[req.seq] = req;
       postMessage(req, [buffer.buffer]);
     },
     setCursor: function(opts) {
@@ -232,14 +233,14 @@ var Libmensa;
       var reply = msg.data;
       var seq = reply.seq;
       if (seq !== undefined) {
-        var req = g_requests[seq];
+        var req = g_requests[seq];console.log(req);
         if (req) {
           var param = msg.data.payload;
           if (req.resource === 'window' && req.action === 'create') {
             // var window = new Window(msg.data.payload);
             // g_windows.push(window);
             var window = Libmensa.findWindowByWid(req.payload.wid);
-            window.id = reply.payload;
+            window.id = reply.payload;console.log(window.id);
             for (var i in window.sendList) {
               window.sendList[i]();
             }

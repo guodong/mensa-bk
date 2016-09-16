@@ -145,7 +145,7 @@
       var ab = msg.data;
       var dv = new DataView(ab);
       switch (dv.getUint8(0)) {
-        case Cip.EVENT.CIP_EVENT_WINDOW_CREATE:
+        case Cip.EVENT.CIP_EVENT_WINDOW_CREATE:console.log('create');
           var cewc_dv = dv;
           var wid = cewc_dv.getUint32(1, true);
           var opts = {
