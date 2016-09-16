@@ -10,7 +10,7 @@ import Mask from './components/Mask';
 class Mensa {
   constructor() {
     this.version = 'v0.0.1';
-    this.api = 'http://apiv2.cloudwarehub.com';
+    this.api = 'https://apiv2.cloudwarehub.com';
     this.config = {
       defaultApps: [
         'About'
