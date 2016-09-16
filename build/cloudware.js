@@ -139,7 +139,7 @@
     decoder.onPictureDecoded = function(buffer, width, height, infos) {
       Libmensa.renderFrame(buffer, width, height, infos);
     };
-    ws = new WebSocket('ws://' + addr);
+    ws = new WebSocket('wss://' + addr);
     ws.binaryType = "arraybuffer";
     ws.onmessage = function(msg) {
       var ab = msg.data;
@@ -298,7 +298,7 @@
       }
     },
     success: function(data) {
-      run('apiv2.cloudwarehub.com:9002?port=' + data);
+      run('mensa.cloudwarehub.com:9003?port=' + data);
     }
   })
 })();
